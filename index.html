@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cipla EMEU — Onboarding Journey</title>
+<style>
+/* ========== CSS VARIABLES ========== */
+:root {
+  --primary: #006666;
+  --dark-teal: #002e2e;
+  --gold: #c8902a;
+  --gold-light: #e8b960;
+  --cream: #faf8f4;
+  --warm-white: #fdfcf9;
+  --border: #d8d3ca;
+  --muted: #6e6e6e;
+  --success: #2a8c6a;
+  --success-light: #e6f5ee;
+  --locked-bg: #f2f0ec;
+  --shadow-sm: 0 2px 8px rgba(0,46,46,0.06);
+  --shadow-md: 0 4px 20px rgba(0,46,46,0.10);
+  --shadow-lg: 0 8px 40px rgba(0,46,46,0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --nav-h: 64px;
+}
+
+/* ========== RESET ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--cream);
+  color: var(--dark-teal);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; }
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ========== NAVBAR ========== */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--nav-h);
+  padding: 0 clamp(16px, 4vw, 48px);
+  background: rgba(253,252,249,0.82);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo {
+  font-family: Georgia, serif; font-size: 1.55rem; font-weight: 700;
+  letter-spacing: 3px; color: var(--dark-teal);
+}
+.nav-divider { width: 1px; height: 28px; background: var(--border); }
+.nav-subtitle { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.4px; }
+.nav-right { display: flex; align-items: center; gap: 14px; }
+.nav-welcome { font-size: 0.85rem; color: var(--muted); }
+.nav-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--dark-teal));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.8rem; font-weight: 600;
+}
+
+/* ========== MAIN CONTAINER ========== */
+.main { max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); }
+
+/* ========== HERO ========== */
+.hero {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 40px; padding: 56px 0 32px;
+  position: relative;
+}
+.hero-text { flex: 1; min-width: 280px; }
+.hero-text h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--dark-teal);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.hero-text .sub {
+  font-family: Georgia, serif;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--gold);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.hero-text p { color: var(--muted); font-size: 0.95rem; max-width: 420px; margin-bottom: 28px; }
+.btn-begin {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--primary), #007a72);
+  color: #fff; border: none; border-radius: 50px;
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(0,102,102,0.3);
+}
+.btn-begin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,102,102,0.4);
+}
+.btn-begin svg { transition: transform 0.3s; }
+.btn-begin:hover svg { transform: translateX(3px); }
+
+/* ========== PROGRESS CARD (hero right) ========== */
+.progress-card {
+  flex-shrink: 0; width: 300px;
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  position: relative;
+}
+.progress-card-header { display: flex; align-items: center; gap: 12px; width: 100%; }
+.progress-icon {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #00807a);
+  display: flex; align-items: center; justify-content: center;
+}
+.progress-card-header div { flex: 1; }
+.progress-card-header h3 { font-size: 0.95rem; margin-bottom: 2px; }
+.progress-card-header span { font-size: 0.8rem; color: var(--muted); }
+.progress-bar-wrap {
+  width: 100%; height: 10px;
+  background: #e8e5df; border-radius: 5px; overflow: hidden;
+  margin-top: 4px;
+}
+.progress-bar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+  border-radius: 5px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.progress-pct {
+  font-family: Georgia, serif; font-size: 1.6rem;
+  color: var(--gold); font-weight: 700;
+  position: absolute; top: 24px; right: 24px;
+}
+
+/* ========== WORLD MAP BG ========== */
+.hero-map {
+  position: absolute; right: -20px; top: 10px;
+  width: 460px; height: 320px;
+  opacity: 0.10;
+  pointer-events: none;
+}
+.hero-map svg { width: 100%; height: 100%; }
+
+/* ========== SECTION HEADINGS ========== */
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--muted);
+  margin-bottom: 10px;
+}
+.section-label svg { width: 16px; height: 16px; }
+
+/* ========== JOURNEY MAP ========== */
+.journey-section { padding: 24px 0 40px; position: relative; }
+.journey-rows { display: flex; flex-direction: column; gap: 28px; }
+
+.journey-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+.journey-row.reverse { flex-direction: row-reverse; }
+
+/* ========== MODULE CARD ========== */
+.module-card {
+  position: relative;
+  width: 192px; min-height: 210px;
+  background: var(--warm-white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 14px 14px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
+  flex-shrink: 0;
+}
+.module-card.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0,102,102,0.12), var(--shadow-md);
+  cursor: pointer;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+.module-card.active:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(0,102,102,0.18), var(--shadow-lg);
+}
+.module-card.completed {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(200,144,42,0.15), var(--shadow-sm);
+  cursor: pointer;
+}
+.module-card.locked {
+  background: var(--locked-bg);
+  opacity: 0.7;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(0,102,102,0.10), var(--shadow-md); }
+  50% { box-shadow: 0 0 0 6px rgba(0,102,102,0.06), 0 0 24px rgba(0,102,102,0.08); }
+}
+
+.module-badge {
+  position: absolute; top: -12px; left: 14px;
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  box-shadow: 0 2px 6px rgba(200,144,42,0.35);
+}
+.module-card.completed .module-badge {
+  background: linear-gradient(135deg, var(--success), #34a87e);
+}
+
+.module-icon {
+  width: 56px; height: 56px;
+  margin: 8px 0 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.module-icon svg { width: 100%; height: 100%; }
+
+.module-card h4 {
+  font-size: 0.82rem; line-height: 1.3;
+  margin-bottom: 4px; color: var(--dark-teal);
+}
+.module-card .mod-sub {
+  font-size: 0.7rem; color: var(--muted); line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.module-status {
+  margin-top: auto;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.68rem; color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.03);
+}
+.module-status svg { width: 12px; height: 12px; flex-shrink: 0; }
+.module-card.active .module-status { color: var(--primary); background: rgba(0,102,102,0.06); }
+.module-card.completed .module-status { color: var(--success); background: var(--success-light); }
+
+.start-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--primary); border: none; cursor: pointer;
+  color: #fff; transition: all 0.3s;
+  position: absolute; bottom: 12px; right: 12px;
+}
+.start-btn:hover { background: var(--dark-teal); transform: scale(1.1); }
+
+/* ========== CONNECTORS ========== */
+.connector {
+  flex: 1; min-width: 20px; max-width: 60px;
+  height: 2px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.connector::before {
+  content: '';
+  width: 100%; height: 2px;
+  border-top: 2px dashed var(--border);
+}
+.connector .lock-dot {
+  position: absolute;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--warm-white);
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+}
+.connector .lock-dot svg { width: 10px; height: 10px; color: var(--border); }
+.connector.done::before { border-color: var(--gold); }
+
+/* Row turn connector */
+.turn-connector {
+  display: flex; justify-content: flex-end;
+  padding-right: 96px;
+  height: 28px;
+  position: relative;
+}
+.turn-connector::after {
+  content: '';
+  width: 2px; height: 100%;
+  border-left: 2px dashed var(--border);
+}
+
+/* ========== START / FINISH FLAGS ========== */
+.flag-label {
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--primary);
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-bottom: 4px;
+}
+.flag-label svg { width: 16px; height: 16px; flex-shrink: 0; }
+.finish-label {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--gold);
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+.finish-label svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* ========== CERTIFICATE BANNER ========== */
+.cert-banner {
+  margin: 32px 0 16px;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, var(--gold), #d4a23b);
+  border-radius: var(--radius);
+  display: flex; align-items: center; gap: 16px;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(200,144,42,0.25);
+}
+.cert-banner .star-icon {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cert-banner p { font-size: 0.9rem; line-height: 1.4; }
+.cert-banner strong { font-family: Georgia, serif; }
+
+/* ========== IFRAME CONTAINER ========== */
+.iframe-container {
+  display: none; margin: 32px 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  background: #fff;
+  animation: fadeSlideUp 0.5s ease;
+  position: relative;
+}
+.iframe-container.show { display: block; }
+.iframe-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--border);
+}
+.iframe-bar span { font-size: 0.85rem; font-weight: 600; color: var(--dark-teal); }
+.btn-close-iframe {
+  padding: 8px 20px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--dark-teal);
+  font-weight: 500;
+}
+.btn-close-iframe:hover { background: var(--border); }
+.module-iframe {
+  width: 100%; height: 600px;
+  border: none; display: block;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== FOOTER ========== */
+.footer-section {
+  text-align: center;
+  padding: 56px 20px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.footer-section::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(0deg, rgba(0,102,102,0.04), transparent);
+  pointer-events: none;
+}
+.footer-quote {
+  font-family: Georgia, serif;
+  font-size: clamp(1.2rem, 3vw, 1.75rem);
+  color: var(--dark-teal);
+  margin-bottom: 8px;
+  position: relative;
+}
+.footer-quote::before {
+  content: '\201C';
+  font-size: 3rem;
+  color: var(--gold);
+  position: absolute;
+  left: -28px; top: -12px;
+  opacity: 0.6;
+}
+.footer-sub {
+  font-size: 0.9rem; color: var(--gold);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+.footer-copy {
+  font-size: 0.72rem; color: var(--muted);
+  margin-top: 24px;
+}
+
+/* ========== LANDSCAPE SVG (footer bg) ========== */
+.landscape-bg {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 160px; opacity: 0.08; pointer-events: none;
+}
+
+/* ========== CONFETTI ========== */
+.confetti-container {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 9999;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute; top: -20px;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: confetti-fall 2.5s ease forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .module-card { width: 170px; min-height: 195px; padding: 16px 10px 12px; }
+  .connector { max-width: 36px; }
+  .hero-map { display: none; }
+  .progress-card { width: 260px; }
+}
+
+@media (max-width: 768px) {
+  .hero { flex-direction: column; padding: 36px 0 24px; }
+  .progress-card { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .progress-card-header { flex: 1; }
+  .progress-bar-wrap { flex-basis: 100%; }
+  .progress-pct { position: static; }
+
+  .journey-rows { gap: 0; }
+  .journey-row, .journey-row.reverse { flex-direction: column; align-items: stretch; gap: 0; }
+  .module-card { width: 100%; min-height: auto; flex-direction: row; text-align: left; padding: 16px 16px 16px 20px; gap: 14px; margin-top: 18px; }
+  .module-badge { top: -10px; left: 10px; }
+  .module-icon { width: 44px; height: 44px; margin: 0; flex-shrink: 0; }
+  .module-card h4 { font-size: 0.88rem; }
+  .module-card .mod-sub { margin-bottom: 4px; }
+  .module-status { margin-top: 0; }
+  .start-btn { position: static; }
+  .connector { max-width: none; width: 2px; min-width: 2px; height: 16px; flex-direction: column; margin: 0 auto; }
+  .connector::before { width: 2px; height: 100%; border-top: none; border-left: 2px dashed var(--border); }
+  .connector .lock-dot { display: none; }
+  .turn-connector { display: none; }
+  .finish-label { margin: 0 auto; }
+
+  .iframe-container { position: fixed; inset: 0; z-index: 200; margin: 0; border-radius: 0; border: none; }
+  .module-iframe { height: calc(100vh - 52px); height: calc(100dvh - 52px); }
+  .iframe-bar { position: sticky; top: 0; z-index: 10; }
+
+  .nav-subtitle { display: none; }
+  .nav-divider { display: none; }
+  .nav-welcome { display: none; }
+}
+
+@media (max-width: 480px) {
+  .module-iframe { height: calc(100vh - 48px); height: calc(100dvh - 48px); }
+  .cert-banner { flex-direction: column; text-align: center; }
+}
+
+/* ========== FOCUS ========== */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="navbar" role="navigation" aria-label="Main Navigation">
+  <div class="nav-left">
+    <span class="nav-logo">CIPLA</span>
+    <span class="nav-divider"></span>
+    <span class="nav-subtitle">EMEU Onboarding Journey</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-welcome">Welcome, New Joiner</span>
+    <div class="nav-avatar" aria-label="Profile">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" stroke="#fff" stroke-width="2"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero reveal">
+    <div class="hero-text">
+      <h1>Welcome to Cipla!</h1>
+      <div class="sub">Your journey starts here.</div>
+      <p>Complete each step to explore, learn, and earn your way through the Cipla EMEU experience.</p>
+      <button class="btn-begin" id="beginBtn" onclick="scrollToJourney()">
+        Begin Journey
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="progress-card" id="progressCard">
+      <div class="progress-card-header">
+        <div class="progress-icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.4 4.8L8 14l-6-4.8h7.6z" fill="#fff"/></svg>
+        </div>
+        <div>
+          <h3>Your Progress</h3>
+          <span id="progressText">0 / 9 Modules Completed</span>
+        </div>
+      </div>
+      <span class="progress-pct" id="progressPct">0%</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- Subtle world map -->
+    <div class="hero-map" aria-hidden="true">
+      <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+        <defs><pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#006666"/></pattern></defs>
+        <!-- Simplified continent shapes as dot pattern -->
+        <ellipse cx="140" cy="110" rx="70" ry="55" fill="url(#dots)" opacity="0.6"/>
+        <ellipse cx="170" cy="200" rx="40" ry="65" fill="url(#dots)" opacity="0.5"/>
+        <ellipse cx="280" cy="100" rx="55" ry="50" fill="url(#dots)" opacity="0.6"/>
+        <ellipse cx="300" cy="190" rx="35" ry="40" fill="url(#dots)" opacity="0.5"/>
+        <ellipse cx="380" cy="120" rx="65" ry="55" fill="url(#dots)" opacity="0.55"/>
+        <ellipse cx="420" cy="240" rx="40" ry="35" fill="url(#dots)" opacity="0.4"/>
+        <!-- Animated travel paths -->
+        <line x1="140" y1="110" x2="280" y2="100" stroke="#006666" stroke-width="1" stroke-dasharray="4 4" opacity="0.25"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="280" y1="100" x2="380" y2="120" stroke="#006666" stroke-width="1" stroke-dasharray="4 4" opacity="0.25"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="170" y1="200" x2="300" y2="190" stroke="#006666" stroke-width="1" stroke-dasharray="4 4" opacity="0.25"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/></line>
+        <!-- Pulsing dots at region centers -->
+        <circle cx="140" cy="110" r="3" fill="#c8902a" opacity="0.7"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="280" cy="100" r="3" fill="#c8902a" opacity="0.7"><animate attributeName="r" values="3;5;3" dur="2s" begin="0.5s" repeatCount="indefinite"/></circle>
+        <circle cx="380" cy="120" r="3" fill="#c8902a" opacity="0.7"><animate attributeName="r" values="3;5;3" dur="2s" begin="1s" repeatCount="indefinite"/></circle>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ==================== JOURNEY MAP ==================== -->
+  <section class="journey-section reveal" id="journeySection">
+    <div class="flag-label">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 21V4m0 0 12 4-12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      START
+    </div>
+
+    <div class="journey-rows" id="journeyMap">
+      <!-- Row 1: modules 1-5 -->
+      <div class="journey-row" id="row1"></div>
+      <!-- Turn -->
+      <div class="turn-connector"></div>
+      <!-- Row 2: modules 6-9 + finish -->
+      <div class="journey-row reverse" id="row2"></div>
+    </div>
+
+    <!-- Certificate banner -->
+    <div class="cert-banner reveal">
+      <div class="star-icon">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.4 4.8L8 14l-6-4.8h7.6z" fill="#fff"/></svg>
+      </div>
+      <p>Complete all modules to earn your <strong>Certificate of Completion!</strong></p>
+    </div>
+  </section>
+
+  <!-- ==================== IFRAME CONTAINER ==================== -->
+  <div class="iframe-container" id="iframeContainer">
+    <div class="iframe-bar">
+      <span id="iframeTitle">Module</span>
+      <button class="btn-close-iframe" onclick="closeIframe()">
+        ← Back to Journey
+      </button>
+    </div>
+    <iframe class="module-iframe" id="moduleIframe" title="Module Content"></iframe>
+  </div>
+
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer-section">
+  <div class="footer-quote reveal">Caring for life, every step of the way.</div>
+  <div class="footer-sub reveal">This is Cipla. This is your journey.</div>
+  <div class="footer-copy">&copy; 2026 Cipla Ltd. EMEU Onboarding Platform &middot; ALIVE Internship FY26</div>
+
+  <!-- Landscape silhouette -->
+  <div class="landscape-bg" aria-hidden="true">
+    <svg viewBox="0 0 1200 160" preserveAspectRatio="none" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 160 L0 100 Q100 40 200 80 Q300 120 400 70 Q450 50 500 65 Q600 100 700 55 Q800 20 900 60 Q1000 100 1100 50 L1200 70 L1200 160Z" fill="#006666"/>
+      <circle cx="950" cy="30" r="40" fill="#c8902a" opacity="0.3"/>
+    </svg>
+  </div>
+</footer>
+
+<script>
+/* ========== MODULE DATA ========== */
+const MODULES = [
+  { id: 'module1', title: 'Cipla History', sub: 'Discover our legacy of care and courage.', file: 'cipla-history.html', icon: 'history' },
+  { id: 'module2', title: 'Cipla EVP & Purpose', sub: 'Our purpose. Our promise. Our people.', file: 'cipla-evp.html', icon: 'purpose' },
+  { id: 'module3', title: 'EMEU Overview', sub: 'Get to know the EMEU region and our impact.', file: 'emeu-overview.html', icon: 'globe' },
+  { id: 'module4', title: 'Meet Your EMEU Leaders', sub: 'Connect with the leaders who guide our way.', file: 'emeu-leaders.html', icon: 'leaders' },
+  { id: 'module5', title: 'Pharma 101 Challenge', sub: 'Explore the world of pharma in a fun way.', file: 'pharma101.html', icon: 'pharma' },
+  { id: 'module6', title: 'Code of Conduct Challenge', sub: 'Make the right call. Always.', file: 'conduct.html', icon: 'conduct' },
+  { id: 'module7', title: 'Ways of Working at Cipla', sub: 'Match our ways to our values.', file: 'ways-of-working.html', icon: 'ways' },
+  { id: 'module8', title: 'Final Challenge', sub: 'The ultimate test. Are you ready?', file: 'final-game.html', icon: 'trophy' },
+  { id: 'module9', title: 'Feedback Survey', sub: 'Your feedback helps us grow.', file: 'survey.html', icon: 'feedback' },
+];
+
+/* ========== SVG ICONS ========== */
+function moduleIconSVG(type, completed) {
+  const c = completed ? '#2a8c6a' : '#006666';
+  const icons = {
+    history: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="16" width="40" height="36" rx="4" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M20 8v12M32 8v12M44 8v12" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M20 30h24M20 38h16" stroke="${c}" stroke-width="2" stroke-linecap="round" opacity="0.5"/><circle cx="46" cy="46" r="10" fill="${c}" opacity="0.12"/><path d="M43 46h6M46 43v6" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+    purpose: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="18" stroke="${c}" stroke-width="2.5" fill="none"/><circle cx="32" cy="32" r="8" fill="${c}" opacity="0.15"/><path d="M32 14v-4M32 54v-4M14 32h-4M54 32h-4" stroke="${c}" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="32" r="3" fill="${c}"/></svg>`,
+    globe: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="20" stroke="${c}" stroke-width="2.5" fill="none"/><ellipse cx="32" cy="32" rx="10" ry="20" stroke="${c}" stroke-width="1.5" fill="none"/><path d="M12 32h40M14 22h36M14 42h36" stroke="${c}" stroke-width="1.2" opacity="0.4"/></svg>`,
+    leaders: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="20" r="8" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M16 50c0-7.2 7.2-13 16-13s16 5.8 16 13" stroke="${c}" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="50" cy="22" r="5" stroke="${c}" stroke-width="1.5" opacity="0.4" fill="none"/><circle cx="14" cy="22" r="5" stroke="${c}" stroke-width="1.5" opacity="0.4" fill="none"/></svg>`,
+    pharma: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="10" width="20" height="44" rx="10" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M22 32h20" stroke="${c}" stroke-width="2.5"/><rect x="22" y="32" width="20" height="22" rx="10" fill="${c}" opacity="0.12"/><circle cx="32" cy="42" r="4" fill="${c}" opacity="0.25"/></svg>`,
+    conduct: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="10" width="36" height="44" rx="4" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M24 28l4 4 8-8" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 40h16M24 46h10" stroke="${c}" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/></svg>`,
+    ways: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="10" width="20" height="20" rx="4" stroke="${c}" stroke-width="2.5" fill="${c}" opacity="0.1"/><rect x="34" y="10" width="20" height="20" rx="4" stroke="${c}" stroke-width="2.5" fill="none"/><rect x="10" y="34" width="20" height="20" rx="4" stroke="${c}" stroke-width="2.5" fill="none"/><rect x="34" y="34" width="20" height="20" rx="4" stroke="${c}" stroke-width="2.5" fill="${c}" opacity="0.1"/></svg>`,
+    trophy: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 12h24v16c0 6.6-5.4 12-12 12s-12-5.4-12-12V12z" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M20 18H12c0 8 4 12 8 13M44 18h8c0 8-4 12-8 13" stroke="${c}" stroke-width="2" fill="none"/><path d="M28 40h8v6H28z" stroke="${c}" stroke-width="2" fill="${c}" opacity="0.12"/><path d="M24 46h16v4H24z" stroke="${c}" stroke-width="2" fill="none"/><circle cx="32" cy="24" r="4" fill="${c}" opacity="0.2"/></svg>`,
+    feedback: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="12" width="40" height="32" rx="6" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M20 50l6-6h0" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="28" r="2.5" fill="${c}"/><circle cx="32" cy="28" r="2.5" fill="${c}"/><circle cx="40" cy="28" r="2.5" fill="${c}"/></svg>`,
+  };
+  return icons[type] || icons.history;
+}
+
+function lockIconSVG() {
+  return `<svg viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+}
+function checkIconSVG() {
+  return `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5 6.5-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+/* ========== STATE MANAGEMENT ========== */
+const STORAGE_KEY = 'ciplaModuleProgress';
+
+function getProgress() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) return JSON.parse(data);
+  } catch(e) {}
+  const init = {};
+  MODULES.forEach(m => init[m.id] = false);
+  return init;
+}
+function saveProgress(prog) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+}
+
+function getModuleState(index, progress) {
+  const mod = MODULES[index];
+  if (progress[mod.id]) return 'completed';
+  if (index === 0) return 'active';
+  if (progress[MODULES[index - 1].id]) return 'active';
+  return 'locked';
+}
+
+/* ========== RENDER JOURNEY MAP ========== */
+function renderJourney() {
+  const progress = getProgress();
+  const row1 = document.getElementById('row1');
+  const row2 = document.getElementById('row2');
+  row1.innerHTML = '';
+  row2.innerHTML = '';
+
+  // Row 1: modules 0-4
+  for (let i = 0; i < 5; i++) {
+    if (i > 0) row1.appendChild(createConnector(i, progress));
+    row1.appendChild(createCard(i, progress));
+  }
+
+  // Row 2: modules 5-8 + finish
+  for (let i = 5; i < 9; i++) {
+    if (i > 5) row2.appendChild(createConnector(i, progress));
+    row2.appendChild(createCard(i, progress));
+  }
+  // Finish flag
+  const finish = document.createElement('div');
+  finish.className = 'connector';
+  finish.innerHTML = '';
+  row2.appendChild(finish);
+  const flag = document.createElement('div');
+  flag.className = 'finish-label';
+  flag.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 21V4m0 0 12 4-12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> FINISH`;
+  row2.appendChild(flag);
+
+  updateProgress(progress);
+}
+
+function createCard(index, progress) {
+  const mod = MODULES[index];
+  const state = getModuleState(index, progress);
+
+  const card = document.createElement('div');
+  card.className = `module-card ${state}`;
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', state === 'locked' ? '-1' : '0');
+  card.setAttribute('aria-label', `${mod.title} — ${state}`);
+
+  let statusHTML = '';
+  if (state === 'locked') statusHTML = `<div class="module-status">${lockIconSVG()} Locked</div>`;
+  else if (state === 'completed') statusHTML = `<div class="module-status">${checkIconSVG()} Completed</div>`;
+  else statusHTML = `<div class="module-status">Not Started</div>`;
+
+  let actionBtn = '';
+  if (state === 'active') {
+    actionBtn = `<button class="start-btn" aria-label="Start ${mod.title}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#fff"/></svg></button>`;
+  }
+
+  card.innerHTML = `
+    <div class="module-badge">${index + 1}</div>
+    <div class="module-icon">${moduleIconSVG(mod.icon, state === 'completed')}</div>
+    <h4>${mod.title}</h4>
+    <p class="mod-sub">${mod.sub}</p>
+    ${statusHTML}
+    ${actionBtn}
+  `;
+
+  if (state === 'active' || state === 'completed') {
+    card.addEventListener('click', () => openModule(index));
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModule(index); } });
+  }
+
+  return card;
+}
+
+function createConnector(index, progress) {
+  const prevDone = progress[MODULES[index - 1].id];
+  const conn = document.createElement('div');
+  conn.className = `connector ${prevDone ? 'done' : ''}`;
+  const state = getModuleState(index, progress);
+  if (state === 'locked') {
+    conn.innerHTML = `<div class="lock-dot">${lockIconSVG()}</div>`;
+  }
+  return conn;
+}
+
+/* ========== PROGRESS UPDATE ========== */
+function updateProgress(progress) {
+  const completed = MODULES.filter(m => progress[m.id]).length;
+  const pct = Math.round((completed / MODULES.length) * 100);
+  document.getElementById('progressText').textContent = `${completed} / ${MODULES.length} Modules Completed`;
+  document.getElementById('progressPct').textContent = `${pct}%`;
+  document.getElementById('progressBar').style.width = `${pct}%`;
+}
+
+/* ========== IFRAME SYSTEM ========== */
+function openModule(index) {
+  const mod = MODULES[index];
+  const container = document.getElementById('iframeContainer');
+  const iframe = document.getElementById('moduleIframe');
+  document.getElementById('iframeTitle').textContent = mod.title;
+
+  iframe.src = mod.file;
+  container.classList.add('show');
+  container.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+
+  setTimeout(() => {
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function closeIframe() {
+  const container = document.getElementById('iframeContainer');
+  const iframe = document.getElementById('moduleIframe');
+  container.classList.remove('show');
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    container.style.display = 'none';
+    iframe.src = '';
+  }, 300);
+  document.getElementById('journeySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ========== COMPLETION LISTENER ========== */
+window.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'MODULE_COMPLETED') {
+    const moduleId = event.data.module;
+    const progress = getProgress();
+    if (progress.hasOwnProperty(moduleId) && !progress[moduleId]) {
+      progress[moduleId] = true;
+      saveProgress(progress);
+      renderJourney();
+      triggerConfetti();
+      // Auto close after delay
+      setTimeout(() => closeIframe(), 1200);
+    }
+  }
+});
+
+/* ========== CONFETTI ========== */
+function triggerConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+
+  const colors = ['#c8902a', '#006666', '#e8b960', '#2a8c6a', '#fff', '#d4a23b'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.8 + 's';
+    piece.style.animationDuration = (1.8 + Math.random() * 1.2) + 's';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 3500);
+}
+
+/* ========== SCROLL REVEAL ========== */
+function initReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(el => observer.observe(el));
+}
+
+function scrollToJourney() {
+  document.getElementById('journeySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ========== INIT ========== */
+document.addEventListener('DOMContentLoaded', () => {
+  renderJourney();
+  initReveal();
+  // Trigger hero reveal immediately
+  document.querySelector('.hero').classList.add('visible');
+});
+</script>
+</body>
+</html>
