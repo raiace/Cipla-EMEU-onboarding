@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cipla EMEU — Onboarding Journey</title>
+<style>
+/* ========== CSS VARIABLES ========== */
+:root {
+  --primary: #006666;
+  --dark-teal: #002e2e;
+  --gold: #c8902a;
+  --gold-light: #e8b960;
+  --cream: #faf8f4;
+  --warm-white: #fdfcf9;
+  --border: #d8d3ca;
+  --muted: #6e6e6e;
+  --success: #2a8c6a;
+  --success-light: #e6f5ee;
+  --locked-bg: #f2f0ec;
+  --shadow-sm: 0 2px 8px rgba(0,46,46,0.06);
+  --shadow-md: 0 4px 20px rgba(0,46,46,0.10);
+  --shadow-lg: 0 8px 40px rgba(0,46,46,0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --nav-h: 64px;
+}
+
+/* ========== RESET ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--cream);
+  color: var(--dark-teal);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; }
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ========== NAVBAR ========== */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--nav-h);
+  padding: 0 clamp(16px, 4vw, 48px);
+  background: rgba(253,252,249,0.82);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo-img { height: 28px; width: auto; display: block; }
+.nav-divider { width: 1px; height: 28px; background: var(--border); }
+.nav-subtitle { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.4px; }
+.nav-right { display: flex; align-items: center; gap: 14px; }
+.nav-welcome { font-size: 0.85rem; color: var(--muted); }
+.nav-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--dark-teal));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.8rem; font-weight: 600;
+}
+
+/* ========== MAIN CONTAINER ========== */
+.main { max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); }
+
+/* ========== HERO ========== */
+.hero {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 40px; padding: 56px 0 32px;
+  position: relative;
+}
+.hero-text { flex: 1; min-width: 280px; }
+.hero-text h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--dark-teal);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.hero-text .sub {
+  font-family: Georgia, serif;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--gold);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.hero-text p { color: var(--muted); font-size: 0.95rem; max-width: 420px; margin-bottom: 28px; }
+.btn-begin {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--primary), #007a72);
+  color: #fff; border: none; border-radius: 50px;
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(0,102,102,0.3);
+}
+.btn-begin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,102,102,0.4);
+}
+.btn-begin svg { transition: transform 0.3s; }
+.btn-begin:hover svg { transform: translateX(3px); }
+
+/* ========== PROGRESS CARD (hero right) ========== */
+.progress-card {
+  flex-shrink: 0; width: 300px;
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.progress-card-header { display: flex; align-items: center; gap: 12px; width: 100%; }
+.progress-icon {
+  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--primary), #00807a);
+  display: flex; align-items: center; justify-content: center;
+}
+.progress-card-header div { flex: 1; }
+.progress-card-header h3 { font-size: 0.9rem; margin-bottom: 1px; }
+.progress-card-header span { font-size: 0.78rem; color: var(--muted); }
+.progress-bottom {
+  display: flex; align-items: center; gap: 12px;
+}
+.progress-bar-wrap {
+  flex: 1; height: 10px;
+  background: #e8e5df; border-radius: 5px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+  border-radius: 5px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.progress-pct {
+  font-family: Georgia, serif; font-size: 1.1rem;
+  color: var(--gold); font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ========== WORLD MAP BG ========== */
+.hero-map {
+  position: absolute; right: -20px; top: 10px;
+  width: 460px; height: 320px;
+  opacity: 0.10;
+  pointer-events: none;
+}
+.hero-map svg { width: 100%; height: 100%; }
+
+/* ========== SECTION HEADINGS ========== */
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--muted);
+  margin-bottom: 10px;
+}
+.section-label svg { width: 16px; height: 16px; }
+
+/* ========== JOURNEY MAP ========== */
+.journey-section { padding: 24px 0 40px; position: relative; }
+.journey-rows { display: flex; flex-direction: column; gap: 28px; }
+
+.journey-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+.journey-row.reverse { flex-direction: row-reverse; }
+
+/* ========== MODULE CARD ========== */
+.module-card {
+  position: relative;
+  width: 192px; min-height: 210px;
+  background: var(--warm-white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 14px 14px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
+  flex-shrink: 0;
+}
+.module-card.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0,102,102,0.12), var(--shadow-md);
+  cursor: pointer;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+.module-card.active:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(0,102,102,0.18), var(--shadow-lg);
+}
+.module-card.completed {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(200,144,42,0.15), var(--shadow-sm);
+  cursor: pointer;
+}
+.module-card.locked {
+  background: var(--locked-bg);
+  opacity: 0.7;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(0,102,102,0.10), var(--shadow-md); }
+  50% { box-shadow: 0 0 0 6px rgba(0,102,102,0.06), 0 0 24px rgba(0,102,102,0.08); }
+}
+
+.module-badge {
+  position: absolute; top: -12px; left: 14px;
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  box-shadow: 0 2px 6px rgba(200,144,42,0.35);
+}
+.module-card.completed .module-badge {
+  background: linear-gradient(135deg, var(--success), #34a87e);
+}
+
+.module-icon {
+  width: 56px; height: 56px;
+  margin: 8px 0 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.module-icon svg { width: 100%; height: 100%; }
+
+.module-card h4 {
+  font-size: 0.82rem; line-height: 1.3;
+  margin-bottom: 4px; color: var(--dark-teal);
+}
+.module-card .mod-sub {
+  font-size: 0.7rem; color: var(--muted); line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.module-status {
+  margin-top: auto;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.68rem; color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.03);
+}
+.module-status svg { width: 12px; height: 12px; flex-shrink: 0; }
+.module-card.active .module-status { color: var(--primary); background: rgba(0,102,102,0.06); }
+.module-card.completed .module-status { color: var(--success); background: var(--success-light); }
+
+.start-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--primary); border: none; cursor: pointer;
+  color: #fff; transition: all 0.3s;
+  position: absolute; bottom: 12px; right: 12px;
+}
+.start-btn:hover { background: var(--dark-teal); transform: scale(1.1); }
+
+/* ========== CONNECTORS ========== */
+.connector {
+  flex: 1; min-width: 20px; max-width: 60px;
+  height: 2px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.connector::before {
+  content: '';
+  width: 100%; height: 2px;
+  border-top: 2px dashed var(--border);
+}
+.connector .lock-dot {
+  position: absolute;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--warm-white);
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+}
+.connector .lock-dot svg { width: 10px; height: 10px; color: var(--border); }
+.connector.done::before { border-color: var(--gold); }
+
+/* Row turn connector */
+.turn-connector {
+  display: flex; justify-content: flex-end;
+  padding-right: 96px;
+  height: 28px;
+  position: relative;
+}
+.turn-connector::after {
+  content: '';
+  width: 2px; height: 100%;
+  border-left: 2px dashed var(--border);
+}
+
+/* ========== START / FINISH FLAGS ========== */
+.flag-label {
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--primary);
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-bottom: 4px;
+}
+.flag-label svg { width: 16px; height: 16px; flex-shrink: 0; }
+.finish-label {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--gold);
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+.finish-label svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* ========== CERTIFICATE BANNER ========== */
+.cert-banner {
+  margin: 32px 0 16px;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, var(--gold), #d4a23b);
+  border-radius: var(--radius);
+  display: flex; align-items: center; gap: 16px;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(200,144,42,0.25);
+}
+.cert-banner .star-icon {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cert-banner p { font-size: 0.9rem; line-height: 1.4; }
+.cert-banner strong { font-family: Georgia, serif; }
+
+/* ========== IFRAME CONTAINER ========== */
+.iframe-container {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #fff;
+  animation: fadeSlideUp 0.4s ease;
+}
+.iframe-container.show { display: flex; flex-direction: column; }
+.iframe-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.iframe-bar span { font-size: 0.9rem; font-weight: 600; color: var(--dark-teal); }
+.btn-close-iframe {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 20px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--dark-teal);
+  font-weight: 600;
+  font-family: system-ui, sans-serif;
+}
+.btn-close-iframe:hover { background: var(--border); }
+.btn-close-iframe svg { width: 16px; height: 16px; flex-shrink: 0; }
+.module-iframe {
+  width: 100%;
+  flex: 1;
+  border: none; display: block;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== FOOTER ========== */
+.footer-section {
+  text-align: center;
+  padding: 56px 20px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.footer-section::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(0deg, rgba(0,102,102,0.04), transparent);
+  pointer-events: none;
+}
+.footer-quote {
+  font-family: Georgia, serif;
+  font-size: clamp(1.2rem, 3vw, 1.75rem);
+  color: var(--dark-teal);
+  margin-bottom: 8px;
+  position: relative;
+}
+.footer-quote::before {
+  content: '\201C';
+  font-size: 3rem;
+  color: var(--gold);
+  position: absolute;
+  left: -28px; top: -12px;
+  opacity: 0.6;
+}
+.footer-sub {
+  font-size: 0.9rem; color: var(--gold);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+.footer-copy {
+  font-size: 0.72rem; color: var(--muted);
+  margin-top: 24px;
+}
+
+/* ========== LANDSCAPE SVG (footer bg) ========== */
+.landscape-bg {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 160px; opacity: 0.08; pointer-events: none;
+}
+
+/* ========== CONFETTI ========== */
+.confetti-container {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 9999;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute; top: -20px;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: confetti-fall 2.5s ease forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .module-card { width: 170px; min-height: 195px; padding: 16px 10px 12px; }
+  .connector { max-width: 36px; }
+  .hero-map { display: none; }
+  .progress-card { width: 260px; }
+}
+
+@media (max-width: 768px) {
+  .hero { flex-direction: column; padding: 36px 0 24px; }
+  .progress-card { width: 100%; }
+
+  .journey-rows { gap: 0; }
+  .journey-row, .journey-row.reverse { flex-direction: column; align-items: stretch; gap: 0; }
+  .module-card { width: 100%; min-height: auto; flex-direction: row; text-align: left; padding: 16px 16px 16px 20px; gap: 14px; margin-top: 18px; }
+  .module-badge { top: -10px; left: 10px; }
+  .module-icon { width: 44px; height: 44px; margin: 0; flex-shrink: 0; }
+  .module-card h4 { font-size: 0.88rem; }
+  .module-card .mod-sub { margin-bottom: 4px; }
+  .module-status { margin-top: 0; }
+  .start-btn { position: static; }
+  .connector { max-width: none; width: 2px; min-width: 2px; height: 16px; flex-direction: column; margin: 0 auto; }
+  .connector::before { width: 2px; height: 100%; border-top: none; border-left: 2px dashed var(--border); }
+  .connector .lock-dot { display: none; }
+  .turn-connector { display: none; }
+  .finish-label { margin: 0 auto; }
+
+  .nav-subtitle { display: none; }
+  .nav-divider { display: none; }
+  .nav-welcome { display: none; }
+}
+
+@media (max-width: 480px) {
+  .cert-banner { flex-direction: column; text-align: center; }
+}
+
+/* ========== FOCUS ========== */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ===== LANGUAGE PICKER ===== */
+.lang-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#faf8f4,#f0ede6 50%,#e8e3d9);}
+.lang-card{background:#fdfcf9;border:1px solid #d8d3ca;border-radius:20px;padding:44px 40px;text-align:center;max-width:420px;width:90%;box-shadow:0 8px 40px rgba(0,46,46,.10);}
+.lc-logo-img{height:32px;width:auto;margin-bottom:6px;}
+.lang-card .lc-div{width:40px;height:2px;background:#c8902a;margin:0 auto 20px;}
+.lang-card h2{font-family:'Playfair Display',Georgia,serif;font-size:1.6rem;color:#002e2e;margin-bottom:6px;}
+.lang-card h2 span{color:#006666;}
+.lang-card p{font-size:.85rem;color:#6e6e6e;margin-bottom:28px;line-height:1.5;}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.lang-btn{padding:14px 16px;border:1.5px solid #d8d3ca;border-radius:14px;background:#faf8f4;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:'DM Sans',system-ui,sans-serif;}
+.lang-btn:hover{border-color:#006666;background:rgba(0,102,102,.04);transform:translateY(-2px);}
+.lang-btn.selected{border-color:#006666;background:rgba(0,102,102,.08);}
+.lang-btn .lf{font-size:1.4rem;}
+.lang-btn .ln{font-size:.82rem;font-weight:700;color:#002e2e;}
+.lang-btn .lns{font-size:.68rem;color:#6e6e6e;}
+.lang-confirm{width:100%;padding:14px;background:linear-gradient(135deg,#006666,#008078);color:#fff;border:none;border-radius:50px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'DM Sans',system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,102,102,.25);transition:all .35s;}
+.lang-confirm:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,102,102,.3);}
+
+/* ===== LANG SWITCHER (navbar) ===== */
+.lang-switch{display:flex;align-items:center;gap:4px;margin-right:6px}
+.lang-sw-btn{padding:4px 9px;border:1px solid var(--border);border-radius:20px;background:transparent;font-size:.7rem;font-weight:700;cursor:pointer;color:var(--muted);transition:all .2s;font-family:'DM Sans',system-ui,sans-serif;line-height:1}
+.lang-sw-btn:hover{border-color:var(--primary);color:var(--primary)}
+.lang-sw-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="lang-overlay" id="langOverlay" style="display:none;">
+  <div class="lang-card">
+    <img src="Cipla_logo_svg.png" alt="Cipla" class="lc-logo-img">
+    <div class="lc-div"></div>
+    <h2>Choose your <span>Language</span></h2>
+    <p>Select your preferred language for the onboarding experience.</p>
+    <div class="lang-grid">
+      <button class="lang-btn selected" onclick="selectLang(this,'en')" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">English</span><span class="lns">English</span></button>
+      <button class="lang-btn" onclick="selectLang(this,'es')" data-lang="es"><span class="lf">🇪🇸</span><span class="ln">Español</span><span class="lns">Spanish</span></button>
+      <button class="lang-btn" onclick="selectLang(this,'pt')" data-lang="pt"><span class="lf">🇧🇷</span><span class="ln">Português</span><span class="lns">Portuguese</span></button>
+      <button class="lang-btn" onclick="selectLang(this,'de')" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">Deutsch</span><span class="lns">German</span></button>
+    </div>
+    <button class="lang-confirm" onclick="confirmLang()">Continue →</button>
+  </div>
+</div>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="navbar" role="navigation" aria-label="Main Navigation">
+  <div class="nav-left">
+    <img src="Cipla_logo_svg.png" alt="Cipla" class="nav-logo-img">
+    <span class="nav-divider"></span>
+    <span class="nav-subtitle" id="navSub">EMEU Onboarding Journey</span>
+  </div>
+  <div class="nav-right">
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-sw-btn" onclick="switchLang('en')" data-l="en">EN</button>
+      <button class="lang-sw-btn" onclick="switchLang('es')" data-l="es">ES</button>
+      <button class="lang-sw-btn" onclick="switchLang('pt')" data-l="pt">PT</button>
+      <button class="lang-sw-btn" onclick="switchLang('de')" data-l="de">DE</button>
+    </div>
+    <span class="nav-welcome" id="navWelcome">Welcome, New Joiner</span>
+    <div class="nav-avatar" aria-label="Profile">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" stroke="#fff" stroke-width="2"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero reveal">
+    <div class="hero-text">
+      <h1 id="heroH1">Welcome to Cipla!</h1>
+      <div class="sub" id="heroSub">Your journey starts here.</div>
+      <p id="heroBody">Complete each step to explore, learn, and earn your way through the Cipla EMEU experience.</p>
+      <button class="btn-begin" id="beginBtn" onclick="scrollToJourney()">
+        <span id="beginBtnTxt">Begin Journey</span>
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="progress-card" id="progressCard">
+      <div class="progress-card-header">
+        <div class="progress-icon">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.4 4.8L8 14l-6-4.8h7.6z" fill="#fff"/></svg>
+        </div>
+        <div>
+          <h3 id="progressTitle">Your Progress</h3>
+          <span id="progressText">0 / 8 Modules Completed</span>
+        </div>
+      </div>
+      <div class="progress-bottom">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <span class="progress-pct" id="progressPct">0%</span>
+      </div>
+    </div>
+
+    <!-- Subtle world map -->
+    <div class="hero-map" aria-hidden="true">
+      <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+        <defs><pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#006666"/></pattern></defs>
+        <!-- Simplified continent shapes as dot pattern -->
+        <ellipse cx="140" cy="110" rx="70" ry="55" fill="url(#dots)" opacity="0.6"/>
+        <ellipse cx="170" cy="200" rx="40" ry="65" fill="url(#dots)" opacity="0.5"/>
+        <ellipse cx="280" cy="100" rx="55" ry="50" fill="url(#dots)" opacity="0.6"/>
+        <ellipse cx="300" cy="190" rx="35" ry="40" fill="url(#dots)" opacity="0.5"/>
+        <ellipse cx="380" cy="120" rx="65" ry="55" fill="url(#dots)" opacity="0.55"/>
+        <ellipse cx="420" cy="240" rx="40" ry="35" fill="url(#dots)" opacity="0.4"/>
+        <!-- Animated travel paths -->
+        <line x1="140" y1="110" x2="280" y2="100" stroke="#006666" stroke-width="1" stroke-dasharray="4 4" opacity="0.25"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="280" y1="100" x2="380" y2="120" stroke="#006666" stroke-width="1" stroke-dasharray="4 4" opacity="0.25"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/></line>
+        <line x1="170" y1="200" x2="300" y2="190" stroke="#006666" stroke-width="1" stroke-dasharray="4 4" opacity="0.25"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/></line>
+        <!-- Pulsing dots at region centers -->
+        <circle cx="140" cy="110" r="3" fill="#c8902a" opacity="0.7"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="280" cy="100" r="3" fill="#c8902a" opacity="0.7"><animate attributeName="r" values="3;5;3" dur="2s" begin="0.5s" repeatCount="indefinite"/></circle>
+        <circle cx="380" cy="120" r="3" fill="#c8902a" opacity="0.7"><animate attributeName="r" values="3;5;3" dur="2s" begin="1s" repeatCount="indefinite"/></circle>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ==================== JOURNEY MAP ==================== -->
+  <section class="journey-section reveal" id="journeySection">
+    <div class="flag-label">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 21V4m0 0 12 4-12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      START
+    </div>
+
+    <div class="journey-rows" id="journeyMap">
+      <!-- Row 1: modules 1-5 -->
+      <div class="journey-row" id="row1"></div>
+      <!-- Turn -->
+      <div class="turn-connector"></div>
+      <!-- Row 2: modules 6-9 + finish -->
+      <div class="journey-row reverse" id="row2"></div>
+    </div>
+
+    <!-- Certificate banner -->
+    <div class="cert-banner reveal">
+      <div class="star-icon">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.4 4.8L8 14l-6-4.8h7.6z" fill="#fff"/></svg>
+      </div>
+      <p id="certText">Complete all modules to earn your <strong>Certificate of Completion!</strong></p>
+    </div>
+  </section>
+
+  <!-- ==================== IFRAME CONTAINER ==================== -->
+  <div class="iframe-container" id="iframeContainer">
+    <div class="iframe-bar">
+      <button class="btn-close-iframe" onclick="closeIframe()">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5m0 0l6 6m-6-6l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="backBtn">Back to Journey</span>
+      </button>
+      <span id="iframeTitle">Module</span>
+    </div>
+    <iframe class="module-iframe" id="moduleIframe" title="Module Content"></iframe>
+  </div>
+
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer-section">
+  <div class="footer-quote reveal" id="footerQuote">Caring for life, every step of the way.</div>
+  <div class="footer-sub reveal" id="footerSub">This is Cipla. This is your journey.</div>
+  <div class="footer-copy">&copy; 2026 Cipla Ltd. EMEU Onboarding Platform &middot; ALIVE Internship FY26</div>
+
+  <!-- Landscape silhouette -->
+  <div class="landscape-bg" aria-hidden="true">
+    <svg viewBox="0 0 1200 160" preserveAspectRatio="none" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 160 L0 100 Q100 40 200 80 Q300 120 400 70 Q450 50 500 65 Q600 100 700 55 Q800 20 900 60 Q1000 100 1100 50 L1200 70 L1200 160Z" fill="#006666"/>
+      <circle cx="950" cy="30" r="40" fill="#c8902a" opacity="0.3"/>
+    </svg>
+  </div>
+</footer>
+
+<script>
+/* ========== LANGUAGE PACK ========== */
+const TRANSLATIONS = {
+  en: {
+    navSub:"EMEU Onboarding Journey",welcome:"Welcome, New Joiner",heroH1:"Welcome to Cipla!",heroSub:"Your journey starts here.",heroBody:"Complete each step to explore, learn, and earn your way through the Cipla EMEU experience.",beginBtn:"Begin Journey",progressTitle:"Your Progress",progressText:(n,t)=>`${n} / ${t} Modules Completed`,startLabel:"START",finishLabel:"FINISH",certText:"Complete all modules to earn your",certStrong:"Certificate of Completion!",footerQuote:"Caring for life, every step of the way.",footerSub:"This is Cipla. This is your journey.",statusNotStarted:"Not Started",statusLocked:"Locked",statusCompleted:"Completed",backBtn:"Back to Journey",
+    m:[{title:"Cipla History",sub:"Discover our legacy of care and courage."},{title:"Cipla EVP & Purpose",sub:"Our purpose. Our promise. Our people."},{title:"EMEU Overview",sub:"Map the EMEU countries and our footprint."},{title:"EMEU Quiz",sub:"Test your knowledge of the EMEU region."},{title:"Pharma 101 Challenge",sub:"Match the pharma jargon like a pro."},{title:"Inside Cipla Ecosystem",sub:"Explore how Cipla works from the inside."},{title:"Final Game",sub:"The ultimate test. Are you ready?"},{title:"Feedback Survey",sub:"Your feedback helps us grow."}],
+    completeModuleBtn:"Complete Module",completedBtn:"✓ Module Completed!",caringTagline:'"Caring for life, every step of the way."',
+    chBadge:"Timeline Challenge",chH1a:"Cipla",chH1b:"Journey",chSub:"Explore Cipla's remarkable history — from a small lab in 1935 to a global pharmaceutical powerhouse. Drag each milestone to its correct year on the timeline.",chInstruction:"Drag & drop events to match each year",chStartBtn:"Start Challenge",chCompH1a:"Journey",chCompH1b:"Complete!",chCompSub:"You've mapped Cipla's incredible legacy — from a rented bungalow in Bombay to a global force caring for millions worldwide.",
+    ceBadge:"Hangman Challenge",ceH1a:"Unlock the",ceH1b:"Cipla Way",ceSub:"Find the values behind every decision at Cipla. Guess the hidden words, discover the OneCipla Credo, and unlock what drives us.",ceStartBtn:"Play & Learn",ceCompH1a:"You've",ceCompH1b:"Unlocked the Cipla Way!",ceCompSub:"These are the five pillars of the OneCipla Credo.",
+    eoBadge:"Map Challenge",eoH1a:"Welcome to",eoH1b:"Cipla!",eoSub:"Let's explore where Cipla touches lives around the world. Place countries on the map and discover our global footprint!",eoStep1:"<b>Drag</b> a country chip to its correct spot on the world map",eoStep2:"Complete <b>6 countries per round</b> to advance to the next level",eoStep3:"Unlock a <b>Cipla fact</b> for every country you place correctly!",eoStartBtn:"Start Challenge →",eoWinH:"Journey",eoWinEm:"Complete!",eoWinSub:"You've mapped Cipla's global footprint — from Europe to Latin America, you know where we care for life.",eoLoseH:"Time's",eoLoseEm:"Up!",eoLoseSub:"So close! Every try helps you learn Cipla's global reach.",
+    eqBadge:"Word Search Challenge",eqH1a:"EMEU",eqH1b:"Brand Quest",eqSub:"Cipla's key brands power healthcare across Europe, the Middle East, Asia, and Latin America. Can you find them all hidden in the grid?",eqStep1:"<strong>Tap</strong> a letter to start, then <strong>tap</strong> the last letter of the word",eqStep2:"Words run <strong>horizontally</strong> or <strong>vertically</strong> only",eqStep3:"Find all <strong>6 key brands</strong> to complete the challenge!",eqStartBtn:"Start Search",eqCompH1a:"All Brands",eqCompH1b:"Found!",eqCompSub:"You've discovered Cipla's key brands across the EMEU region — from respiratory leaders to rare disease innovators.",
+    phBadge:"Pharma 101 Challenge",phH1a:"Read the",phH1b:"Label",phSub:"Every medicine tells a story on its packaging. Study real Cipla product labels and identify the pharma terminology hidden in plain sight.",phStep1:"Study the <strong>medicine label</strong> shown on screen",phStep2:"Answer <strong>5 questions</strong> about what you see",phStep3:"Complete all <strong>3 rounds</strong> to master pharma labels",phStartBtn:"Start Challenge",phCompH1a:"Label",phCompH1b:"Expert!",phCompSub:"You can now read any pharma label with confidence — from API to Schedule, you know what every term means.",
+    ecBadge:"Ecosystem Challenge",ecH1a:"Inside the",ecH1b:"Cipla Machine",ecSub:"At Cipla, no department works alone. From a product idea to a patient's hands — it takes an entire ecosystem. Ready to see how it all connects?",ecG1:"Who Solves This?",ecG1sub:"Real scenarios. Pick which departments collaborate to solve them.",ecG2:"Who Am I?",ecG2sub:"Clues reveal one by one. Guess the department — fewer clues = more points.",ecStartBtn:"Let's Go",ecCompH1a:"Ecosystem",ecCompH1b:"Expert!",ecCompSub:"You understand how Cipla's departments connect — from portfolio strategy to the patient's hands. That's the Cipla machine.",
+    // shared game UI
+    scoreLabel:"Score:",roundLabel:(r,t)=>`Round ${r} of ${t}`,
+    // cipla-history
+    chCorrect:"Correct!",chWrong:"Not quite — try another year!",chRecapTitle:"Cipla",chRecapSub:"Journey",
+    // cipla-evp
+    ceClueNum:(n)=>`Clue ${n}`,ceRound:(r,t)=>`Round ${r} of ${t}`,
+    ceWinTitle:"Well Done!",ceLoseTitle:"Almost!",
+    ceFinalSub:"Together, these values make us a global pharmaceutical firm that consistently Cares for Life.",
+    // emeu-overview
+    eoRoundLabel:(r,t)=>`Round ${r} of ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} placed`,
+    eoStreakMsg:"🔥 Streak! +8s",eoDropOK:"✓ Correct!",eoDropFar:"Not quite — too far from the target!",eoDropClose:"Almost! A bit off target.",
+    eoFactTitle:"Cipla Fact",eoFactClose:"Continue",eoLoseSub2:"So close! Every try helps you learn Cipla's global reach.",
+    // emeu-quiz
+    eqCorrectPrefix:"Correct!",eqWrongMsg:"Not quite — try another year!",
+    // pharma101
+    phCorrectPrefix:"✓ Correct!",phWrongPrefix:"✗ Not quite.",phScoreLbl:"Score:",
+    phRecapTitle:"What You Learned",
+    // cipla-ecosystem
+    ecScenarioLabel:(n,t)=>`Scenario ${n} of ${t}`,ecRiddleLabel:(n,t)=>`Riddle ${n} of ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} of ${t} departments identified (+${p} pts)`,
+    ecHintLabel:"Think:",ecNextScenario:"Next Scenario →",ecNextRiddle:"Next Riddle →",
+    ecGame1Label:"Game 1 of 2",ecGame2Label:"Game 2 of 2",
+    ecTransSub:"Now let's flip it. Can you identify a department from just 3 clues?",
+  },
+  es: {
+    navSub:"Viaje de Incorporación EMEU",welcome:"Bienvenido, Nuevo Integrante",heroH1:"¡Bienvenido a Cipla!",heroSub:"Tu viaje comienza aquí.",heroBody:"Completa cada paso para explorar, aprender y avanzar en tu experiencia EMEU con Cipla.",beginBtn:"Comenzar Viaje",progressTitle:"Tu Progreso",progressText:(n,t)=>`${n} / ${t} Módulos Completados`,startLabel:"INICIO",finishLabel:"FINAL",certText:"Completa todos los módulos para obtener tu",certStrong:"¡Certificado de Finalización!",footerQuote:"Cuidando la vida, a cada paso del camino.",footerSub:"Esto es Cipla. Este es tu viaje.",statusNotStarted:"No iniciado",statusLocked:"Bloqueado",statusCompleted:"Completado",backBtn:"Volver al Viaje",
+
+    backBtn:"Back to Journey",
+    // cipla-history extra
+    chTrayLabel:"Milestones",chDropPlaceholder:"Drop here",chViewTimeline:"View Full Timeline",chScoreLabel:"Matched:",
+    // cipla-evp extra
+    ceShowClue:"Show Clue",ceWellDone:"Well Done!",ceAlmost:"Almost!",ceNext:"Next",ceTryAgain:"Try Again",ceSeeResults:"See Results",ceLives:"Lives:",
+    // emeu-overview extra
+    eoRound1Sub:"Great work! You found all 6 countries. Ready for Round 2?",eoRound2Sub:"Amazing! 12 done — just 4 more to go!",eoContinue:"Continue",eoTryAgain:"Try Again",eoPlayAgain:"Play Again",eoPlacedLabel:"Placed:",
+    // emeu-quiz extra
+    eqBrandsPanel:"Key Brands",eqFoundLabel:"Found:",eqHintBtn:"Give me a hint",
+    // pharma101 extra
+    phRoundLabel:(r,t)=>`Round ${r} of ${t}`,phQLabel:(q,t)=>`Question ${q} of ${t}`,phNextQ:"Next Question →",phNextLabel:"Next Label →",phSeeResults:"See Results →",phFinalScore:"Total:",
+    // cipla-ecosystem extra
+    ecLockIn:"Lock In Answer",ecRevealClue:(n)=>`Reveal Clue ${n} (-50 pts)`,ecAllClues:"All clues revealed",ecScoreLabel:"Score:",ecTotalLabel:"Total:",ecPart1Score:(s)=>`Part 1 Score: ${s} pts`,ecPart1Done:"Part 1 Complete!",ecPart1Sub:"Now let\'s flip it. Instead of matching departments to scenarios — can you identify a department from just 3 clues?",ecPlayG2:"Play \"Who Am I?\"",
+    m:[{title:"Historia de Cipla",sub:"Descubre nuestro legado de cuidado y valentía."},{title:"EVP y Propósito de Cipla",sub:"Nuestro propósito. Nuestra promesa. Nuestra gente."},{title:"Descripción General EMEU",sub:"Mapea los países EMEU y nuestra huella global."},{title:"Quiz EMEU",sub:"Pon a prueba tu conocimiento de la región EMEU."},{title:"Desafío Pharma 101",sub:"Empareja el vocabulario farmacéutico como un pro."},{title:"Ecosistema Interno Cipla",sub:"Explora cómo funciona Cipla desde adentro."},{title:"Juego Final",sub:"La prueba definitiva. ¿Estás listo?"},{title:"Encuesta de Feedback",sub:"Tu opinión nos ayuda a crecer."}],
+    completeModuleBtn:"Completar Módulo",completedBtn:"✓ ¡Módulo Completado!",caringTagline:'"Cuidando la vida, a cada paso del camino."',
+    chBadge:"Desafío de Cronología",chH1a:"Cipla",chH1b:"Viaje",chSub:"Explora la notable historia de Cipla — desde un pequeño laboratorio en 1935 hasta una empresa farmacéutica global. Arrastra cada hito al año correcto.",chInstruction:"Arrastra y suelta eventos para emparejar cada año",chStartBtn:"Comenzar Desafío",chCompH1a:"¡Viaje",chCompH1b:"Completo!",chCompSub:"Has mapeado el increíble legado de Cipla — desde un bungalow en Bombay hasta una fuerza global.",
+    ceBadge:"Desafío Ahorcado",ceH1a:"Desbloquea el",ceH1b:"Camino Cipla",ceSub:"Encuentra los valores detrás de cada decisión en Cipla. Adivina las palabras ocultas y descubre el Credo OneCipla.",ceStartBtn:"Jugar y Aprender",ceCompH1a:"¡Has",ceCompH1b:"Desbloqueado el Camino Cipla!",ceCompSub:"Estos son los cinco pilares del Credo OneCipla.",
+    eoBadge:"Desafío de Mapa",eoH1a:"¡Bienvenido a",eoH1b:"Cipla!",eoSub:"Exploremos dónde Cipla toca vidas en todo el mundo. ¡Coloca los países en el mapa!",eoStep1:"<b>Arrastra</b> un chip de país a su lugar correcto en el mapa",eoStep2:"Completa <b>6 países por ronda</b> para avanzar al siguiente nivel",eoStep3:"¡Desbloquea un <b>dato de Cipla</b> por cada país que coloques correctamente!",eoStartBtn:"Comenzar Desafío →",eoWinH:"¡Viaje",eoWinEm:"Completo!",eoWinSub:"Has mapeado la huella global de Cipla — desde Europa hasta Latinoamérica.",eoLoseH:"¡Se acabó",eoLoseEm:"el tiempo!",eoLoseSub:"¡Casi! Cada intento te ayuda a aprender la presencia global de Cipla.",
+    eqBadge:"Sopa de Letras",eqH1a:"EMEU",eqH1b:"Búsqueda de Marcas",eqSub:"Las marcas clave de Cipla impulsan la salud en Europa, Oriente Medio, Asia y Latinoamérica. ¿Puedes encontrarlas todas?",eqStep1:"<strong>Toca</strong> una letra para comenzar, luego <strong>toca</strong> la última letra",eqStep2:"Las palabras van <strong>horizontal</strong> o <strong>verticalmente</strong>",eqStep3:"¡Encuentra las <strong>6 marcas clave</strong> para completar el desafío!",eqStartBtn:"Comenzar Búsqueda",eqCompH1a:"¡Todas las Marcas",eqCompH1b:"Encontradas!",eqCompSub:"Has descubierto las marcas clave de Cipla en la región EMEU.",
+    phBadge:"Desafío Pharma 101",phH1a:"Lee la",phH1b:"Etiqueta",phSub:"Cada medicamento cuenta una historia en su empaque. Estudia etiquetas reales de Cipla e identifica la terminología farmacéutica.",phStep1:"Estudia la <strong>etiqueta del medicamento</strong> mostrada en pantalla",phStep2:"Responde <strong>5 preguntas</strong> sobre lo que ves",phStep3:"Completa las <strong>3 rondas</strong> para dominar las etiquetas farmacéuticas",phStartBtn:"Comenzar Desafío",phCompH1a:"¡Experto en",phCompH1b:"Etiquetas!",phCompSub:"Ahora puedes leer cualquier etiqueta farmacéutica con confianza.",
+    ecBadge:"Desafío Ecosistema",ecH1a:"Dentro de la",ecH1b:"Máquina Cipla",ecSub:"En Cipla, ningún departamento trabaja solo. De una idea de producto a las manos del paciente — se necesita todo un ecosistema.",ecG1:"¿Quién lo Resuelve?",ecG1sub:"Escenarios reales. Elige qué departamentos colaboran.",ecG2:"¿Quién Soy?",ecG2sub:"Las pistas se revelan una a una. Adivina el departamento.",ecStartBtn:"¡Vamos!",ecCompH1a:"¡Experto en",ecCompH1b:"Ecosistema!",ecCompSub:"Entiendes cómo se conectan los departamentos de Cipla.",
+    scoreLabel:"Puntuación:",roundLabel:(r,t)=>`Ronda ${r} de ${t}`,
+    chCorrect:"¡Correcto!",chWrong:"No exactamente — intenta otro año.",chRecapTitle:"Cipla",chRecapSub:"Viaje",
+    ceClueNum:(n)=>`Pista ${n}`,ceRound:(r,t)=>`Ronda ${r} de ${t}`,
+    ceWinTitle:"¡Bien Hecho!",ceLoseTitle:"¡Casi!",
+    ceFinalSub:"Juntos, estos valores nos convierten en una empresa farmacéutica global que cuida la vida de manera constante.",
+    eoRoundLabel:(r,t)=>`Ronda ${r} de ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} colocados`,
+    eoStreakMsg:"🔥 ¡Racha! +8s",eoDropOK:"✓ ¡Correcto!",eoDropFar:"¡No exactamente — demasiado lejos!",eoDropClose:"¡Casi! Un poco fuera de lugar.",
+    eoFactTitle:"Dato de Cipla",eoFactClose:"Continuar",eoLoseSub2:"¡Casi! Cada intento te ayuda a aprender la presencia global de Cipla.",
+    eqCorrectPrefix:"¡Correcto!",eqWrongMsg:"No exactamente — sigue intentando.",
+    phCorrectPrefix:"✓ ¡Correcto!",phWrongPrefix:"✗ No exactamente.",phScoreLbl:"Puntuación:",
+    phRecapTitle:"Lo Que Aprendiste",
+    ecScenarioLabel:(n,t)=>`Escenario ${n} de ${t}`,ecRiddleLabel:(n,t)=>`Adivinanza ${n} de ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} de ${t} departamentos identificados (+${p} pts)`,
+    ecHintLabel:"Pista:",ecNextScenario:"Siguiente Escenario →",ecNextRiddle:"Siguiente Adivinanza →",
+    ecGame1Label:"Juego 1 de 2",ecGame2Label:"Juego 2 de 2",
+    ecTransSub:"Ahora al revés. ¿Puedes identificar un departamento con solo 3 pistas?",
+  },
+  pt: {
+    navSub:"Jornada de Integração EMEU",welcome:"Bem-vindo, Novo Colaborador",heroH1:"Bem-vindo à Cipla!",heroSub:"A sua jornada começa aqui.",heroBody:"Complete cada etapa para explorar, aprender e avançar na sua experiência EMEU com a Cipla.",beginBtn:"Iniciar Jornada",progressTitle:"Seu Progresso",progressText:(n,t)=>`${n} / ${t} Módulos Concluídos`,startLabel:"INÍCIO",finishLabel:"FINAL",certText:"Conclua todos os módulos para obter seu",certStrong:"Certificado de Conclusão!",footerQuote:"Cuidando da vida, a cada passo do caminho.",footerSub:"Isso é a Cipla. Esta é a sua jornada.",statusNotStarted:"Não iniciado",statusLocked:"Bloqueado",statusCompleted:"Concluído",backBtn:"Voltar à Jornada",
+
+    backBtn:"Volver al Viaje",
+    chTrayLabel:"Hitos",chDropPlaceholder:"Soltar aquí",chViewTimeline:"Ver Cronología Completa",chScoreLabel:"Emparejados:",
+    ceShowClue:"Mostrar Pista",ceWellDone:"¡Bien Hecho!",ceAlmost:"¡Casi!",ceNext:"Siguiente",ceTryAgain:"Intentar de Nuevo",ceSeeResults:"Ver Resultados",ceLives:"Vidas:",
+    eoRound1Sub:"¡Buen trabajo! Encontraste los 6 países. ¿Listo para la Ronda 2?",eoRound2Sub:"¡Increíble! 12 listos — ¡solo 4 más!",eoContinue:"Continuar",eoTryAgain:"Intentar de Nuevo",eoPlayAgain:"Jugar de Nuevo",eoPlacedLabel:"Colocados:",
+    eqBrandsPanel:"Marcas Clave",eqFoundLabel:"Encontrados:",eqHintBtn:"Dame una pista",
+    phRoundLabel:(r,t)=>`Ronda ${r} de ${t}`,phQLabel:(q,t)=>`Pregunta ${q} de ${t}`,phNextQ:"Siguiente Pregunta →",phNextLabel:"Siguiente Etiqueta →",phSeeResults:"Ver Resultados →",phFinalScore:"Total:",
+    ecLockIn:"Confirmar Respuesta",ecRevealClue:(n)=>`Revelar Pista ${n} (-50 pts)`,ecAllClues:"Todas las pistas reveladas",ecScoreLabel:"Puntuación:",ecTotalLabel:"Total:",ecPart1Score:(s)=>`Puntuación Parte 1: ${s} pts`,ecPart1Done:"¡Parte 1 Completa!",ecPart1Sub:"Ahora al revés. En lugar de emparejar departamentos con escenarios, ¿puedes identificar un departamento con solo 3 pistas?",ecPlayG2:"Jugar \"¿Quién Soy?\"",
+    m:[{title:"História da Cipla",sub:"Descubra nosso legado de cuidado e coragem."},{title:"EVP e Propósito da Cipla",sub:"Nosso propósito. Nossa promessa. Nossa gente."},{title:"Visão Geral EMEU",sub:"Mapeie os países EMEU e nossa presença global."},{title:"Quiz EMEU",sub:"Teste seu conhecimento sobre a região EMEU."},{title:"Desafio Pharma 101",sub:"Conecte o jargão farmacêutico como um profissional."},{title:"Ecossistema Interno da Cipla",sub:"Explore como a Cipla funciona por dentro."},{title:"Jogo Final",sub:"O teste definitivo. Você está pronto?"},{title:"Pesquisa de Feedback",sub:"Sua opinião nos ajuda a crescer."}],
+    completeModuleBtn:"Concluir Módulo",completedBtn:"✓ Módulo Concluído!",caringTagline:'"Cuidando da vida, a cada passo do caminho."',
+    chBadge:"Desafio da Linha do Tempo",chH1a:"Cipla",chH1b:"Jornada",chSub:"Explore a notável história da Cipla — de um pequeno laboratório em 1935 a uma potência farmacêutica global. Arraste cada marco para o ano correto.",chInstruction:"Arraste e solte eventos para combinar com cada ano",chStartBtn:"Iniciar Desafio",chCompH1a:"Jornada",chCompH1b:"Concluída!",chCompSub:"Você mapeou o incrível legado da Cipla — de um bangalô em Bombaim a uma força global que cuida de milhões.",
+    ceBadge:"Desafio da Forca",ceH1a:"Descubra o",ceH1b:"Caminho Cipla",ceSub:"Encontre os valores por trás de cada decisão na Cipla. Adivinhe as palavras ocultas e descubra o Credo OneCipla.",ceStartBtn:"Jogar e Aprender",ceCompH1a:"Você",ceCompH1b:"Descobriu o Caminho Cipla!",ceCompSub:"Estes são os cinco pilares do Credo OneCipla.",
+    eoBadge:"Desafio do Mapa",eoH1a:"Bem-vindo à",eoH1b:"Cipla!",eoSub:"Vamos explorar onde a Cipla toca vidas ao redor do mundo. Coloque os países no mapa!",eoStep1:"<b>Arraste</b> um chip de país para o local correto no mapa",eoStep2:"Complete <b>6 países por rodada</b> para avançar ao próximo nível",eoStep3:"Desbloqueie um <b>fato da Cipla</b> para cada país colocado corretamente!",eoStartBtn:"Iniciar Desafio →",eoWinH:"Jornada",eoWinEm:"Concluída!",eoWinSub:"Você mapeou a presença global da Cipla — da Europa à América Latina.",eoLoseH:"Tempo",eoLoseEm:"Esgotado!",eoLoseSub:"Tão perto! Cada tentativa ajuda você a aprender a presença global da Cipla.",
+    eqBadge:"Caça-Palavras",eqH1a:"EMEU",eqH1b:"Busca de Marcas",eqSub:"As principais marcas da Cipla impulsionam a saúde na Europa, Oriente Médio, Ásia e América Latina. Você consegue encontrá-las todas?",eqStep1:"<strong>Toque</strong> uma letra para começar, depois <strong>toque</strong> a última letra",eqStep2:"As palavras vão <strong>horizontal</strong> ou <strong>verticalmente</strong>",eqStep3:"Encontre as <strong>6 marcas principais</strong> para concluir o desafio!",eqStartBtn:"Iniciar Busca",eqCompH1a:"Todas as Marcas",eqCompH1b:"Encontradas!",eqCompSub:"Você descobriu as principais marcas da Cipla na região EMEU.",
+    phBadge:"Desafio Pharma 101",phH1a:"Leia o",phH1b:"Rótulo",phSub:"Cada medicamento conta uma história em sua embalagem. Estude rótulos reais da Cipla e identifique a terminologia farmacêutica.",phStep1:"Estude o <strong>rótulo do medicamento</strong> mostrado na tela",phStep2:"Responda <strong>5 perguntas</strong> sobre o que você vê",phStep3:"Conclua todas as <strong>3 rodadas</strong> para dominar os rótulos farmacêuticos",phStartBtn:"Iniciar Desafio",phCompH1a:"Especialista em",phCompH1b:"Rótulos!",phCompSub:"Agora você pode ler qualquer rótulo farmacêutico com confiança.",
+    ecBadge:"Desafio do Ecossistema",ecH1a:"Dentro da",ecH1b:"Máquina Cipla",ecSub:"Na Cipla, nenhum departamento trabalha sozinho. De uma ideia de produto às mãos do paciente — é necessário todo um ecossistema.",ecG1:"Quem Resolve?",ecG1sub:"Cenários reais. Escolha quais departamentos colaboram.",ecG2:"Quem Sou Eu?",ecG2sub:"As pistas são reveladas uma a uma. Adivinhe o departamento.",ecStartBtn:"Vamos Lá!",ecCompH1a:"Especialista em",ecCompH1b:"Ecossistema!",ecCompSub:"Você entende como os departamentos da Cipla se conectam.",
+    scoreLabel:"Pontuação:",roundLabel:(r,t)=>`Rodada ${r} de ${t}`,
+    chCorrect:"Correto!",chWrong:"Não exatamente — tente outro ano.",chRecapTitle:"Cipla",chRecapSub:"Jornada",
+    ceClueNum:(n)=>`Dica ${n}`,ceRound:(r,t)=>`Rodada ${r} de ${t}`,
+    ceWinTitle:"Muito Bem!",ceLoseTitle:"Quase!",
+    ceFinalSub:"Juntos, esses valores nos tornam uma empresa farmacêutica global que cuida da vida de forma consistente.",
+    eoRoundLabel:(r,t)=>`Rodada ${r} de ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} colocados`,
+    eoStreakMsg:"🔥 Sequência! +8s",eoDropOK:"✓ Correto!",eoDropFar:"Não exatamente — muito longe do alvo!",eoDropClose:"Quase! Um pouco fora do alvo.",
+    eoFactTitle:"Fato da Cipla",eoFactClose:"Continuar",eoLoseSub2:"Tão perto! Cada tentativa ajuda você a aprender a presença global da Cipla.",
+    eqCorrectPrefix:"Correto!",eqWrongMsg:"Não exatamente — continue tentando.",
+    phCorrectPrefix:"✓ Correto!",phWrongPrefix:"✗ Não exatamente.",phScoreLbl:"Pontuação:",
+    phRecapTitle:"O Que Você Aprendeu",
+    ecScenarioLabel:(n,t)=>`Cenário ${n} de ${t}`,ecRiddleLabel:(n,t)=>`Charada ${n} de ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} de ${t} departamentos identificados (+${p} pts)`,
+    ecHintLabel:"Dica:",ecNextScenario:"Próximo Cenário →",ecNextRiddle:"Próxima Charada →",
+    ecGame1Label:"Jogo 1 de 2",ecGame2Label:"Jogo 2 de 2",
+    ecTransSub:"Agora ao contrário. Você consegue identificar um departamento com apenas 3 dicas?",
+  },
+  de: {
+    navSub:"EMEU Onboarding-Reise",welcome:"Willkommen, Neuer Mitarbeiter",heroH1:"Willkommen bei Cipla!",heroSub:"Ihre Reise beginnt hier.",heroBody:"Schließen Sie jeden Schritt ab, um die Cipla EMEU-Erfahrung zu erkunden und voranzukommen.",beginBtn:"Reise beginnen",progressTitle:"Ihr Fortschritt",progressText:(n,t)=>`${n} / ${t} Module abgeschlossen`,startLabel:"START",finishLabel:"ZIEL",certText:"Schließen Sie alle Module ab, um Ihr",certStrong:"Abschlusszertifikat zu erhalten!",footerQuote:"Das Leben pflegen, Schritt für Schritt.",footerSub:"Das ist Cipla. Das ist Ihre Reise.",statusNotStarted:"Nicht gestartet",statusLocked:"Gesperrt",statusCompleted:"Abgeschlossen",backBtn:"Zurück zur Reise",
+
+    backBtn:"Voltar à Jornada",
+    chTrayLabel:"Marcos",chDropPlaceholder:"Soltar aqui",chViewTimeline:"Ver Linha do Tempo Completa",chScoreLabel:"Combinados:",
+    ceShowClue:"Mostrar Dica",ceWellDone:"Muito Bem!",ceAlmost:"Quase!",ceNext:"Próximo",ceTryAgain:"Tentar Novamente",ceSeeResults:"Ver Resultados",ceLives:"Vidas:",
+    eoRound1Sub:"Ótimo trabalho! Você encontrou os 6 países. Pronto para a Rodada 2?",eoRound2Sub:"Incrível! 12 prontos — apenas mais 4!",eoContinue:"Continuar",eoTryAgain:"Tentar Novamente",eoPlayAgain:"Jogar Novamente",eoPlacedLabel:"Colocados:",
+    eqBrandsPanel:"Marcas Principais",eqFoundLabel:"Encontrados:",eqHintBtn:"Me dê uma dica",
+    phRoundLabel:(r,t)=>`Rodada ${r} de ${t}`,phQLabel:(q,t)=>`Pergunta ${q} de ${t}`,phNextQ:"Próxima Pergunta →",phNextLabel:"Próximo Rótulo →",phSeeResults:"Ver Resultados →",phFinalScore:"Total:",
+    ecLockIn:"Confirmar Resposta",ecRevealClue:(n)=>`Revelar Dica ${n} (-50 pts)`,ecAllClues:"Todas as dicas reveladas",ecScoreLabel:"Pontuação:",ecTotalLabel:"Total:",ecPart1Score:(s)=>`Pontuação Parte 1: ${s} pts`,ecPart1Done:"Parte 1 Concluída!",ecPart1Sub:"Agora ao contrário. Em vez de combinar departamentos com cenários — você consegue identificar um departamento com apenas 3 dicas?",ecPlayG2:"Jogar \"Quem Sou Eu?\"",
+    m:[{title:"Cipla Geschichte",sub:"Entdecken Sie unser Erbe der Fürsorge und des Mutes."},{title:"Cipla EVP & Zweck",sub:"Unser Zweck. Unser Versprechen. Unsere Menschen."},{title:"EMEU Überblick",sub:"Kartieren Sie die EMEU-Länder und unseren Fußabdruck."},{title:"EMEU Quiz",sub:"Testen Sie Ihr Wissen über die EMEU-Region."},{title:"Pharma 101 Challenge",sub:"Ordnen Sie den Pharma-Fachjargon wie ein Profi zu."},{title:"Cipla Ökosystem",sub:"Erkunden Sie, wie Cipla von innen funktioniert."},{title:"Abschlussspiel",sub:"Der ultimative Test. Sind Sie bereit?"},{title:"Feedback-Umfrage",sub:"Ihr Feedback hilft uns zu wachsen."}],
+    completeModuleBtn:"Modul abschließen",completedBtn:"✓ Modul abgeschlossen!",caringTagline:'"Das Leben pflegen, Schritt für Schritt."',
+    chBadge:"Zeitleisten-Challenge",chH1a:"Cipla",chH1b:"Reise",chSub:"Erkunden Sie Ciplas bemerkenswerte Geschichte — von einem kleinen Labor 1935 bis zu einem globalen Pharmaunternehmen. Ziehen Sie jeden Meilenstein in das richtige Jahr.",chInstruction:"Ereignisse per Drag & Drop dem richtigen Jahr zuordnen",chStartBtn:"Challenge starten",chCompH1a:"Reise",chCompH1b:"Abgeschlossen!",chCompSub:"Sie haben Ciplas unglaubliches Erbe kartiert — von einem Bungalow in Bombay bis zu einer globalen Kraft.",
+    ceBadge:"Galgenmännchen Challenge",ceH1a:"Entdecken Sie den",ceH1b:"Cipla-Weg",ceSub:"Finden Sie die Werte hinter jeder Entscheidung bei Cipla. Erraten Sie die versteckten Wörter und entdecken Sie das OneCipla Credo.",ceStartBtn:"Spielen & Lernen",ceCompH1a:"Sie haben den",ceCompH1b:"Cipla-Weg entdeckt!",ceCompSub:"Dies sind die fünf Säulen des OneCipla Credos.",
+    eoBadge:"Karten-Challenge",eoH1a:"Willkommen bei",eoH1b:"Cipla!",eoSub:"Erkunden wir, wo Cipla weltweit Leben berührt. Platzieren Sie Länder auf der Karte und entdecken Sie unseren globalen Fußabdruck!",eoStep1:"<b>Ziehen</b> Sie einen Länder-Chip an die richtige Stelle auf der Weltkarte",eoStep2:"Schließen Sie <b>6 Länder pro Runde</b> ab, um zur nächsten Stufe zu gelangen",eoStep3:"Schalten Sie für jedes richtig platzierte Land ein <b>Cipla-Faktum</b> frei!",eoStartBtn:"Challenge starten →",eoWinH:"Reise",eoWinEm:"Abgeschlossen!",eoWinSub:"Sie haben Ciplas globalen Fußabdruck kartiert — von Europa bis Lateinamerika.",eoLoseH:"Zeit",eoLoseEm:"Abgelaufen!",eoLoseSub:"Fast! Jeder Versuch hilft Ihnen, Ciplas globale Präsenz kennenzulernen.",
+    eqBadge:"Wortsuche-Challenge",eqH1a:"EMEU",eqH1b:"Markensuche",eqSub:"Ciplas Schlüsselmarken treiben die Gesundheitsversorgung in Europa, dem Nahen Osten, Asien und Lateinamerika an. Können Sie sie alle finden?",eqStep1:"<strong>Tippen</strong> Sie einen Buchstaben zum Starten, dann den letzten Buchstaben des Wortes",eqStep2:"Wörter verlaufen nur <strong>horizontal</strong> oder <strong>vertikal</strong>",eqStep3:"Finden Sie alle <strong>6 Schlüsselmarken</strong>, um die Challenge abzuschließen!",eqStartBtn:"Suche starten",eqCompH1a:"Alle Marken",eqCompH1b:"Gefunden!",eqCompSub:"Sie haben Ciplas Schlüsselmarken in der EMEU-Region entdeckt.",
+    phBadge:"Pharma 101 Challenge",phH1a:"Lesen Sie das",phH1b:"Etikett",phSub:"Jedes Medikament erzählt eine Geschichte auf seiner Verpackung. Studieren Sie echte Cipla-Etiketten und identifizieren Sie die Pharmaterminologie.",phStep1:"Studieren Sie das <strong>Arzneimitteletikett</strong> auf dem Bildschirm",phStep2:"Beantworten Sie <strong>5 Fragen</strong> zu dem, was Sie sehen",phStep3:"Schließen Sie alle <strong>3 Runden</strong> ab, um Pharmeetiketten zu meistern",phStartBtn:"Challenge starten",phCompH1a:"Etiketten-",phCompH1b:"Experte!",phCompSub:"Sie können jetzt jedes Pharmaetikett sicher lesen.",
+    ecBadge:"Ökosystem-Challenge",ecH1a:"Innerhalb der",ecH1b:"Cipla-Maschine",ecSub:"Bei Cipla arbeitet keine Abteilung allein. Von einer Produktidee bis in die Hände des Patienten — es braucht ein ganzes Ökosystem.",ecG1:"Wer löst das?",ecG1sub:"Echte Szenarien. Wählen Sie die Abteilungen, die zusammenarbeiten.",ecG2:"Wer bin ich?",ecG2sub:"Hinweise werden nacheinander enthüllt. Erraten Sie die Abteilung.",ecStartBtn:"Los geht's!",ecCompH1a:"Ökosystem-",ecCompH1b:"Experte!",ecCompSub:"Sie verstehen, wie Ciplas Abteilungen miteinander verbunden sind.",
+    scoreLabel:"Punkte:",roundLabel:(r,t)=>`Runde ${r} von ${t}`,
+    chCorrect:"Richtig!",chWrong:"Nicht ganz — versuche ein anderes Jahr.",chRecapTitle:"Cipla",chRecapSub:"Reise",
+    ceClueNum:(n)=>`Hinweis ${n}`,ceRound:(r,t)=>`Runde ${r} von ${t}`,
+    ceWinTitle:"Gut gemacht!",ceLoseTitle:"Fast!",
+    ceFinalSub:"Zusammen machen uns diese Werte zu einem globalen Pharmaunternehmen, das konsequent für das Leben sorgt.",
+    eoRoundLabel:(r,t)=>`Runde ${r} von ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} platziert`,
+    eoStreakMsg:"🔥 Serie! +8s",eoDropOK:"✓ Richtig!",eoDropFar:"Nicht ganz — zu weit vom Ziel entfernt!",eoDropClose:"Fast! Etwas daneben.",
+    eoFactTitle:"Cipla-Fakt",eoFactClose:"Weiter",eoLoseSub2:"Fast! Jeder Versuch hilft Ihnen, Ciplas globale Präsenz kennenzulernen.",
+    eqCorrectPrefix:"Richtig!",eqWrongMsg:"Nicht ganz — versuche es weiter.",
+    phCorrectPrefix:"✓ Richtig!",phWrongPrefix:"✗ Nicht ganz.",phScoreLbl:"Punkte:",
+    phRecapTitle:"Was Sie Gelernt Haben",
+    ecScenarioLabel:(r,t)=>`Szenario ${r} von ${t}`,ecRiddleLabel:(r,t)=>`Rätsel ${r} von ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} von ${t} Abteilungen erkannt (+${p} Pkt)`,
+    ecHintLabel:"Hinweis:",ecNextScenario:"Nächstes Szenario →",ecNextRiddle:"Nächstes Rätsel →",
+    ecGame1Label:"Spiel 1 von 2",ecGame2Label:"Spiel 2 von 2",
+    ecTransSub:"Jetzt andersherum. Können Sie eine Abteilung aus nur 3 Hinweisen erkennen?",
+  }
+};
+function getLang(){return localStorage.getItem('ciplaLang')||'en';}
+function setLang(l){localStorage.setItem('ciplaLang',l);}
+function t(key){const L=TRANSLATIONS[getLang()]||TRANSLATIONS.en;return L[key]||TRANSLATIONS.en[key]||key;}
+
+/* ===== LANG PICKER FUNCTIONS ===== */
+let _selectedLang = 'en';
+function selectLang(btn, lang) {
+  _selectedLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function confirmLang() {
+  setLang(_selectedLang);
+  document.getElementById('langOverlay').style.display = 'none';
+  MODULES = getModules();
+  applyLang();
+  initLangSwitch();
+  renderJourney();
+  initReveal();
+  document.querySelector('.hero').classList.add('visible');
+}
+function applyLang() {
+  const L = TRANSLATIONS[getLang()] || TRANSLATIONS.en;
+  const set = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+  const setH = (id, val) => { const el=document.getElementById(id); if(el) el.innerHTML=val; };
+  set('navSub', L.navSub);
+  set('navWelcome', L.welcome);
+  set('heroH1', L.heroH1);
+  set('heroSub', L.heroSub);
+  set('heroBody', L.heroBody);
+  set('beginBtnTxt', L.beginBtn);
+  set('progressTitle', L.progressTitle);
+  set('footerQuote', L.footerQuote);
+  set('footerSub', L.footerSub);
+  set('backBtn', L.backBtn);
+  setH('certText', L.certText + ' <strong>' + L.certStrong + '</strong>');
+  const pipsF = document.querySelector('.flag-label');
+  if(pipsF) pipsF.innerHTML = pipsF.innerHTML.replace(/START|INICIO|INÍCIO|START/g, L.startLabel);
+}
+
+/* ========== MODULE DATA ========== */
+function getModules() {
+  const L = TRANSLATIONS[getLang()] || TRANSLATIONS.en;
+  const files = ['cipla-history.html','cipla-evp.html','emeu-overview.html','emeu-quiz.html','pharma101.html','cipla-ecosystem.html','final-game.html','survey.html'];
+  const icons = ['history','purpose','globe','quiz','pharma','ecosystem','trophy','feedback'];
+  return L.m.map((m,i) => ({id:'module'+(i+1), title:m.title, sub:m.sub, file:files[i], icon:icons[i]}));
+}
+let MODULES = getModules();
+
+/* ========== SVG ICONS ========== */
+function moduleIconSVG(type, completed) {
+  const c = completed ? '#2a8c6a' : '#006666';
+  const icons = {
+    history: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="16" width="40" height="36" rx="4" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M20 8v12M32 8v12M44 8v12" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M20 30h24M20 38h16" stroke="${c}" stroke-width="2" stroke-linecap="round" opacity="0.5"/><circle cx="46" cy="46" r="10" fill="${c}" opacity="0.12"/><path d="M43 46h6M46 43v6" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+    purpose: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="18" stroke="${c}" stroke-width="2.5" fill="none"/><circle cx="32" cy="32" r="8" fill="${c}" opacity="0.15"/><path d="M32 14v-4M32 54v-4M14 32h-4M54 32h-4" stroke="${c}" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="32" r="3" fill="${c}"/></svg>`,
+    globe: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="20" stroke="${c}" stroke-width="2.5" fill="none"/><ellipse cx="32" cy="32" rx="10" ry="20" stroke="${c}" stroke-width="1.5" fill="none"/><path d="M12 32h40M14 22h36M14 42h36" stroke="${c}" stroke-width="1.2" opacity="0.4"/></svg>`,
+    quiz: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="20" stroke="${c}" stroke-width="2.5" fill="none"/><circle cx="32" cy="32" r="20" fill="${c}" opacity="0.06"/><text x="32" y="42" text-anchor="middle" font-family="Georgia,serif" font-size="28" font-weight="700" fill="${c}">?</text></svg>`,
+    pharma: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="10" width="20" height="44" rx="10" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M22 32h20" stroke="${c}" stroke-width="2.5"/><rect x="22" y="32" width="20" height="22" rx="10" fill="${c}" opacity="0.12"/><circle cx="32" cy="42" r="4" fill="${c}" opacity="0.25"/></svg>`,
+    ecosystem: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="18" r="8" stroke="${c}" stroke-width="2" fill="${c}" opacity="0.1"/><circle cx="16" cy="44" r="8" stroke="${c}" stroke-width="2" fill="none"/><circle cx="48" cy="44" r="8" stroke="${c}" stroke-width="2" fill="none"/><path d="M27 24l-7 14M37 24l7 14M24 44h16" stroke="${c}" stroke-width="1.8" stroke-dasharray="3 2" opacity="0.5"/></svg>`,
+    trophy: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 12h24v16c0 6.6-5.4 12-12 12s-12-5.4-12-12V12z" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M20 18H12c0 8 4 12 8 13M44 18h8c0 8-4 12-8 13" stroke="${c}" stroke-width="2" fill="none"/><path d="M28 40h8v6H28z" stroke="${c}" stroke-width="2" fill="${c}" opacity="0.12"/><path d="M24 46h16v4H24z" stroke="${c}" stroke-width="2" fill="none"/><circle cx="32" cy="24" r="4" fill="${c}" opacity="0.2"/></svg>`,
+    feedback: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="12" width="40" height="32" rx="6" stroke="${c}" stroke-width="2.5" fill="none"/><path d="M20 50l6-6h0" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="28" r="2.5" fill="${c}"/><circle cx="32" cy="28" r="2.5" fill="${c}"/><circle cx="40" cy="28" r="2.5" fill="${c}"/></svg>`,
+  };
+  return icons[type] || icons.history;
+}
+
+function lockIconSVG() {
+  return `<svg viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+}
+function checkIconSVG() {
+  return `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5 6.5-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+/* ========== STATE MANAGEMENT ========== */
+const STORAGE_KEY = 'ciplaModuleProgress';
+const STORAGE_VER = 'ciplaProgressVersion';
+const CURRENT_VER = '2';
+
+function getProgress() {
+  try {
+    if (localStorage.getItem(STORAGE_VER) !== CURRENT_VER) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(STORAGE_VER, CURRENT_VER);
+    }
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (Object.keys(parsed).length === MODULES.length) return parsed;
+    }
+  } catch(e) {}
+  const init = {};
+  MODULES.forEach(m => init[m.id] = false);
+  return init;
+}
+function saveProgress(prog) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+}
+
+function getModuleState(index, progress) {
+  const mod = MODULES[index];
+  if (progress[mod.id]) return 'completed';
+  if (index === 0) return 'active';
+  if (progress[MODULES[index - 1].id]) return 'active';
+  return 'locked';
+}
+
+/* ========== RENDER JOURNEY MAP ========== */
+function renderJourney() {
+  const progress = getProgress();
+  const row1 = document.getElementById('row1');
+  const row2 = document.getElementById('row2');
+  row1.innerHTML = '';
+  row2.innerHTML = '';
+
+  // Row 1: modules 0-3
+  for (let i = 0; i < 4; i++) {
+    if (i > 0) row1.appendChild(createConnector(i, progress));
+    row1.appendChild(createCard(i, progress));
+  }
+
+  // Row 2: modules 4-7 + finish
+  for (let i = 4; i < 8; i++) {
+    if (i > 4) row2.appendChild(createConnector(i, progress));
+    row2.appendChild(createCard(i, progress));
+  }
+  // Finish flag
+  const finish = document.createElement('div');
+  finish.className = 'connector';
+  finish.innerHTML = '';
+  row2.appendChild(finish);
+  const flag = document.createElement('div');
+  flag.className = 'finish-label';
+  flag.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 21V4m0 0 12 4-12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ${(TRANSLATIONS[getLang()]||TRANSLATIONS.en).finishLabel}`;
+  row2.appendChild(flag);
+
+  updateProgress(progress);
+}
+
+function createCard(index, progress) {
+  const mod = MODULES[index];
+  const state = getModuleState(index, progress);
+
+  const card = document.createElement('div');
+  card.className = `module-card ${state}`;
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', state === 'locked' ? '-1' : '0');
+  card.setAttribute('aria-label', `${mod.title} — ${state}`);
+
+  let statusHTML = '';
+  if (state === 'locked') statusHTML = `<div class="module-status">${lockIconSVG()} ${(TRANSLATIONS[getLang()]||TRANSLATIONS.en).statusLocked}</div>`;
+  else if (state === 'completed') statusHTML = `<div class="module-status">${checkIconSVG()} ${(TRANSLATIONS[getLang()]||TRANSLATIONS.en).statusCompleted}</div>`;
+  else statusHTML = `<div class="module-status">${(TRANSLATIONS[getLang()]||TRANSLATIONS.en).statusNotStarted}</div>`;
+
+  let actionBtn = '';
+  if (state === 'active') {
+    actionBtn = `<button class="start-btn" aria-label="Start ${mod.title}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#fff"/></svg></button>`;
+  }
+
+  card.innerHTML = `
+    <div class="module-badge">${index + 1}</div>
+    <div class="module-icon">${moduleIconSVG(mod.icon, state === 'completed')}</div>
+    <h4>${mod.title}</h4>
+    <p class="mod-sub">${mod.sub}</p>
+    ${statusHTML}
+    ${actionBtn}
+  `;
+
+  if (state === 'active' || state === 'completed') {
+    card.addEventListener('click', () => openModule(index));
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModule(index); } });
+  }
+
+  return card;
+}
+
+function createConnector(index, progress) {
+  const prevDone = progress[MODULES[index - 1].id];
+  const conn = document.createElement('div');
+  conn.className = `connector ${prevDone ? 'done' : ''}`;
+  const state = getModuleState(index, progress);
+  if (state === 'locked') {
+    conn.innerHTML = `<div class="lock-dot">${lockIconSVG()}</div>`;
+  }
+  return conn;
+}
+
+/* ========== PROGRESS UPDATE ========== */
+function updateProgress(progress) {
+  const completed = MODULES.filter(m => progress[m.id]).length;
+  const pct = Math.round((completed / MODULES.length) * 100);
+  document.getElementById('progressText').textContent = (TRANSLATIONS[getLang()]||TRANSLATIONS.en).progressText(completed, MODULES.length);
+  document.getElementById('progressPct').textContent = `${pct}%`;
+  document.getElementById('progressBar').style.width = `${pct}%`;
+}
+
+/* ========== IFRAME SYSTEM ========== */
+function openModule(index) {
+  const mod = MODULES[index];
+  const container = document.getElementById('iframeContainer');
+  const iframe = document.getElementById('moduleIframe');
+  document.getElementById('iframeTitle').textContent = mod.title;
+
+  iframe.src = mod.file;
+  container.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeIframe() {
+  const container = document.getElementById('iframeContainer');
+  const iframe = document.getElementById('moduleIframe');
+  container.classList.remove('show');
+  document.body.style.overflow = '';
+  iframe.src = '';
+  document.getElementById('journeySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ========== COMPLETION LISTENER ========== */
+window.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'MODULE_COMPLETED') {
+    const moduleId = event.data.module;
+    const progress = getProgress();
+    if (progress.hasOwnProperty(moduleId) && !progress[moduleId]) {
+      progress[moduleId] = true;
+      saveProgress(progress);
+      renderJourney();
+      triggerConfetti();
+      // Auto close after delay
+      setTimeout(() => closeIframe(), 1200);
+    }
+  }
+});
+
+/* ========== CONFETTI ========== */
+function triggerConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+
+  const colors = ['#c8902a', '#006666', '#e8b960', '#2a8c6a', '#fff', '#d4a23b'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.8 + 's';
+    piece.style.animationDuration = (1.8 + Math.random() * 1.2) + 's';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 3500);
+}
+
+/* ========== SCROLL REVEAL ========== */
+function initReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(el => observer.observe(el));
+}
+
+
+function switchLang(lang) {
+  setLang(lang);
+  document.querySelectorAll('.lang-sw-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.l === lang);
+  });
+  // Reassign global MODULES with new language FIRST
+  MODULES = getModules();
+  applyLang();
+  renderJourney();
+}
+function initLangSwitch() {
+  const cur = getLang();
+  document.querySelectorAll('.lang-sw-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.l === cur);
+  });
+}
+function scrollToJourney() {
+  document.getElementById('journeySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ========== INIT ========== */
+document.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem('ciplaLang')) {
+    document.getElementById('langOverlay').style.display = 'flex';
+  } else {
+    MODULES = getModules();
+    applyLang();
+    initLangSwitch();
+    renderJourney();
+    initReveal();
+    document.querySelector('.hero').classList.add('visible');
+  }
+});
+</script>
+</body>
+</html>
