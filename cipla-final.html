@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Cipla Final — The Newsroom Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#006666;--teal-l:#e0f5f3;--dark:#002e2e;
+  --gold:#c8902a;--gold-l:#e8b960;--gold-bg:#fff8e7;
+  --cream:#faf8f4;--warm:#ffffff;--border:#e5e0d8;--muted:#6e6e6e;
+  --ok:#2a8c6a;--ok-bg:#e6f5ee;--err:#d32f2f;--err-bg:#fde8e8;
+  --arch:#e53935;--arch-bg:#fde8e8;--arch-mid:#ef9a9a;
+  --sci:#00897b;--sci-bg:#e0f5f3;--sci-mid:#80cbc4;
+  --exp:#f57c00;--exp-bg:#fff3e0;--exp-mid:#ffcc80;
+  --ppl:#8e24aa;--ppl-bg:#f3e5f5;--ppl-mid:#ce93d8;
+  --ins:#1565c0;--ins-bg:#e3f2fd;--ins-mid:#90caf9;
+  --r:14px;--r-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream);color:var(--dark);-webkit-font-smoothing:antialiased;min-height:100%;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column;align-items:center;min-height:100dvh;padding:20px 16px 32px;animation:fadeIn .4s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s cubic-bezier(.22,1,.36,1);min-height:52px;width:100%;max-width:340px;text-align:center}
+.btn-teal{background:linear-gradient(135deg,var(--teal),#008078);color:#fff;box-shadow:0 4px 16px rgba(0,102,102,.25)}
+.btn-teal:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,102,102,.3)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#d9a840);color:#fff;box-shadow:0 4px 16px rgba(200,144,42,.25)}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;box-shadow:none}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-sm{padding:10px 22px;font-size:.82rem;min-height:44px;max-width:none;width:auto}
+
+/* ── INTRO ── */
+#introScreen{background:linear-gradient(160deg,#faf8f4 0%,#f0ece4 60%,#faf8f4 100%);justify-content:flex-start;gap:0}
+.mast-wrap{width:100%;max-width:480px;text-align:center;margin:24px auto 20px}
+.mast-rule{height:3px;background:linear-gradient(90deg,transparent,var(--dark),transparent);margin-bottom:5px}
+.mast-rule-thin{height:1px;background:linear-gradient(90deg,transparent,var(--dark),transparent);margin-top:4px}
+.mast-eye{font-size:.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.mast-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,7vw,2.8rem);font-weight:900;color:var(--dark);line-height:1}
+.mast-title em{color:var(--gold);font-style:normal}
+.mast-foot{display:flex;justify-content:space-between;font-size:.57rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px;font-style:italic}
+
+.breaking-badge{display:inline-flex;align-items:center;gap:6px;background:var(--err);color:#fff;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px}
+.bd{width:6px;height:6px;border-radius:50%;background:#fff;animation:bd 1s ease-in-out infinite}
+@keyframes bd{0%,100%{opacity:1}50%{opacity:.2}}
+
+.intro-title{font-size:clamp(1.3rem,5vw,1.9rem);color:var(--dark);text-align:center;line-height:1.2;margin-bottom:8px}
+.intro-title span{color:var(--gold)}
+.intro-sub{font-size:.88rem;color:var(--muted);text-align:center;max-width:360px;line-height:1.6;margin-bottom:18px}
+
+.mission-box{background:var(--warm);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;width:100%;max-width:400px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,46,46,.05)}
+.mission-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold);font-weight:700;margin-bottom:10px}
+.m-row{display:flex;align-items:flex-start;gap:10px;font-size:.82rem;color:var(--dark);line-height:1.4;margin-bottom:8px}
+.m-row:last-child{margin-bottom:0}
+.m-num{width:22px;height:22px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* Source preview chips */
+.src-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:100%;max-width:400px;margin-bottom:20px}
+.src-chip{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-size:.72rem;font-weight:600;border:1.5px solid}
+
+/* ── HUB ── */
+#hubScreen{background:var(--cream);justify-content:flex-start;gap:0}
+.hub-hdr{width:100%;max-width:500px;text-align:center;margin:16px 0 8px}
+.hub-logo{font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;font-weight:800;color:var(--dark);letter-spacing:2px;margin-bottom:2px}
+.hub-sub{font-size:.75rem;color:var(--muted);line-height:1.4;max-width:360px;margin:0 auto 14px}
+
+/* Overall progress bar */
+.hub-prog-wrap{width:100%;max-width:400px;margin-bottom:16px}
+.hub-prog-lbl{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.hub-prog-track{height:10px;background:var(--border);border-radius:5px;overflow:hidden}
+.hub-prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:5px;transition:width .6s cubic-bezier(.22,1,.36,1)}
+
+/* Source cards */
+.sources-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:480px;flex:1}
+.src-card{
+  background:var(--warm);border:2px solid var(--border);border-radius:var(--r);
+  padding:14px 16px;display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:all .25s cubic-bezier(.22,1,.36,1);
+  position:relative;overflow:hidden;
+}
+.src-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;transition:.3s}
+.src-card.arch::before{background:var(--arch)}
+.src-card.sci::before{background:var(--sci)}
+.src-card.exp::before{background:var(--exp)}
+.src-card.ppl::before{background:var(--ppl)}
+.src-card.ins::before{background:var(--ins)}
+.src-card:hover:not(.done){transform:translateX(4px);box-shadow:0 4px 18px rgba(0,46,46,.08)}
+.src-card.done{opacity:.55;cursor:default;pointer-events:none}
+.src-card.done::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--ok);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
+.src-emo{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;border:2px solid transparent}
+.src-card.arch .src-emo{background:var(--arch-bg);border-color:var(--arch-mid)}
+.src-card.sci .src-emo{background:var(--sci-bg);border-color:var(--sci-mid)}
+.src-card.exp .src-emo{background:var(--exp-bg);border-color:var(--exp-mid)}
+.src-card.ppl .src-emo{background:var(--ppl-bg);border-color:var(--ppl-mid)}
+.src-card.ins .src-emo{background:var(--ins-bg);border-color:var(--ins-mid)}
+.src-info{flex:1}
+.src-name{font-family:'Playfair Display',Georgia,serif;font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:1px}
+.src-dept{font-size:.66rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
+.src-pill{font-size:.62rem;font-weight:700;padding:3px 9px;border-radius:20px;margin-left:auto;flex-shrink:0}
+.src-card:not(.done) .src-pill{background:var(--teal);color:#fff}
+.src-card.done .src-pill{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok)}
+
+.hub-cta{width:100%;max-width:480px;margin-top:10px}
+
+/* ── INTERVIEW ── */
+#ivScreen{background:var(--cream);justify-content:flex-start;padding-top:16px}
+
+.iv-nav{width:100%;max-width:520px;display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-shrink:0}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--warm);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--dark);flex-shrink:0;transition:.2s}
+.back-btn:hover{background:var(--border)}
+.iv-breadcrumb{font-size:.72rem;color:var(--muted);flex:1}
+.iv-q-counter{font-size:.7rem;font-weight:700;color:var(--dark)}
+
+/* Progress for this source */
+.iv-src-prog{width:100%;max-width:520px;margin-bottom:14px;flex-shrink:0}
+.iv-prog-dots{display:flex;gap:6px;margin-bottom:4px}
+.pdot{height:6px;flex:1;border-radius:3px;background:var(--border);transition:.4s}
+.pdot.done{background:var(--ok)}
+.pdot.cur{background:var(--gold)}
+
+/* Character header */
+.iv-char{
+  width:100%;max-width:520px;
+  border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-shrink:0;
+}
+.iv-char.arch{background:var(--arch-bg);border:1.5px solid var(--arch-mid)}
+.iv-char.sci{background:var(--sci-bg);border:1.5px solid var(--sci-mid)}
+.iv-char.exp{background:var(--exp-bg);border:1.5px solid var(--exp-mid)}
+.iv-char.ppl{background:var(--ppl-bg);border:1.5px solid var(--ppl-mid)}
+.iv-char.ins{background:var(--ins-bg);border:1.5px solid var(--ins-mid)}
+.iv-av{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;background:#fff}
+.iv-char-name{font-family:'Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;margin-bottom:2px}
+.iv-char.arch .iv-char-name{color:var(--arch)}
+.iv-char.sci .iv-char-name{color:var(--sci)}
+.iv-char.exp .iv-char-name{color:var(--exp)}
+.iv-char.ppl .iv-char-name{color:var(--ppl)}
+.iv-char.ins .iv-char-name{color:var(--ins)}
+.iv-char-dept{font-size:.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
+
+/* Question bubble */
+.q-bubble{
+  width:100%;max-width:520px;
+  background:var(--warm);border:1.5px solid var(--border);
+  border-radius:4px 16px 16px 16px;
+  padding:16px 18px;margin-bottom:14px;flex-shrink:0;
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(.92rem,2.5vw,1.06rem);color:var(--dark);line-height:1.55;
+  box-shadow:0 2px 10px rgba(0,46,46,.05);
+  position:relative;
+}
+.q-bubble::before{content:'';position:absolute;top:0;left:-13px;border:7px solid transparent;border-right-color:var(--border);border-top-color:var(--border)}
+.q-bubble::after{content:'';position:absolute;top:1.5px;left:-10px;border:6px solid transparent;border-right-color:var(--warm);border-top-color:var(--warm)}
+
+/* Retry notice */
+.retry-note{width:100%;max-width:520px;font-size:.74rem;color:var(--muted);text-align:center;font-style:italic;margin-bottom:6px;flex-shrink:0;min-height:18px}
+
+/* Options */
+.opts{display:flex;flex-direction:column;gap:8px;width:100%;max-width:520px;flex-shrink:0}
+.opt{
+  padding:13px 16px;background:var(--warm);border:2px solid var(--border);
+  border-radius:12px;font-size:.85rem;font-weight:500;color:var(--dark);
+  cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:10px;
+  text-align:left;font-family:'DM Sans',sans-serif;min-height:52px;
+  -webkit-tap-highlight-color:transparent;
+}
+.opt:hover:not(.locked):not(.wrong){border-color:var(--teal);background:rgba(0,102,102,.04);transform:translateX(3px)}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);pointer-events:none}
+.opt.wrong{border-color:var(--err);background:var(--err-bg);color:var(--err);pointer-events:none;animation:shake .4s ease}
+.opt.locked{pointer-events:none}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.opt-ltr{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;transition:.2s;font-family:'DM Sans',sans-serif}
+.opt.correct .opt-ltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong .opt-ltr{background:var(--err);border-color:var(--err);color:#fff}
+
+/* Feedback */
+.iv-fb{width:100%;max-width:520px;padding:11px 14px;border-radius:10px;font-size:.8rem;line-height:1.5;margin-top:8px;flex-shrink:0;min-height:20px;transition:.3s}
+.iv-fb.show-ok{background:var(--ok-bg);border:1px solid rgba(42,140,106,.25);color:var(--ok)}
+.iv-fb.show-err{background:var(--err-bg);border:1px solid rgba(211,47,47,.2);color:var(--err)}
+
+/* Fact reveal card */
+.fact-card{
+  width:100%;max-width:520px;
+  background:var(--warm);border:2px solid var(--ok);
+  border-radius:var(--r);padding:16px 18px;margin-top:12px;flex-shrink:0;
+  animation:factPop .5s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 6px 22px rgba(42,140,106,.14);
+}
+@keyframes factPop{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+.fact-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:2.5px;color:var(--ok);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.fact-body{font-family:'Playfair Display',Georgia,serif;font-size:.92rem;color:var(--dark);line-height:1.6;font-style:italic}
+
+/* ── HEADLINE ── */
+#hlScreen{background:var(--cream);justify-content:flex-start}
+.hl-hdr{text-align:center;width:100%;max-width:520px;margin:20px 0 12px;flex-shrink:0}
+.hl-hdr h2{font-size:clamp(1.2rem,4vw,1.6rem);color:var(--dark);margin-bottom:4px}
+.hl-hdr p{font-size:.8rem;color:var(--muted);line-height:1.5}
+
+.np-tmpl{
+  width:100%;max-width:520px;
+  background:#f7f2e6;border:2px solid #1a1008;border-radius:6px;
+  padding:14px 16px;margin-bottom:12px;
+  box-shadow:3px 3px 0 rgba(0,0,0,.18);flex-shrink:0;
+}
+.np-mini-head{font-family:'Playfair Display',Georgia,serif;font-size:clamp(.72rem,2vw,.9rem);font-weight:900;text-transform:uppercase;letter-spacing:4px;color:#1a1008;border-bottom:2px solid #1a1008;padding-bottom:4px;margin-bottom:10px;text-align:center}
+.hl-hint{font-size:.58rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px;text-align:center}
+.hl-slots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;min-height:46px;margin-bottom:2px}
+.hl-slot{min-width:70px;padding:0 8px;height:40px;border:2px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',Georgia,serif;font-size:.75rem;font-weight:700;color:var(--dark);cursor:pointer;transition:all .2s;background:rgba(255,255,255,.5);white-space:nowrap}
+.hl-slot.filled{border-style:solid;border-color:#1a1008;background:rgba(255,255,255,.9);box-shadow:2px 2px 0 rgba(0,0,0,.1)}
+.hl-slot.filled:hover{border-color:var(--err);background:#fff5f5}
+
+.hl-tip{font-size:.7rem;color:var(--muted);text-align:center;font-style:italic;width:100%;max-width:520px;margin-bottom:10px;flex-shrink:0}
+.tiles-pool{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:100%;max-width:520px;margin-bottom:14px;flex-shrink:0}
+.tile{padding:7px 12px;background:var(--warm);border:2px solid var(--border);border-radius:6px;font-size:.74rem;font-weight:700;color:var(--dark);cursor:pointer;transition:all .2s;font-family:'Playfair Display',Georgia,serif;-webkit-tap-highlight-color:transparent}
+.tile:hover:not(.used){border-color:var(--gold);background:var(--gold-bg);transform:translateY(-2px)}
+.tile.active{border-color:var(--gold);background:#fff3c0;box-shadow:0 0 0 3px rgba(200,144,42,.2)}
+.tile.used{opacity:.22;pointer-events:none}
+
+/* ── FRONT PAGE ── */
+#fpScreen{background:var(--cream);justify-content:flex-start;padding-top:16px}
+.fp-note{text-align:center;font-size:.78rem;color:var(--muted);margin-bottom:10px;width:100%;max-width:520px;flex-shrink:0}
+.front-page{width:100%;max-width:520px;background:#f7f2e6;border:2px solid #1a1008;border-radius:4px;overflow:hidden;box-shadow:5px 5px 0 rgba(26,16,8,.2),0 12px 40px rgba(0,0,0,.1);animation:fpIn .8s cubic-bezier(.22,1,.36,1);flex-shrink:0}
+@keyframes fpIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.fp-head{background:#1a1008;padding:10px 16px 8px;text-align:center}
+.fp-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1rem,4vw,1.5rem);font-weight:900;color:#f7f2e6;letter-spacing:3px;text-transform:uppercase}
+.fp-sub{font-size:.52rem;letter-spacing:3px;color:rgba(247,242,230,.4);text-transform:uppercase;margin-top:2px}
+.fp-ribbon{background:var(--gold);padding:3px 16px;display:flex;justify-content:space-between;font-size:.54rem;font-weight:700;letter-spacing:1px;color:#1a1008}
+.fp-body{padding:12px 14px}
+.fp-brk{font-size:.54rem;text-transform:uppercase;letter-spacing:2px;color:#fff;background:var(--err);display:inline-block;padding:2px 7px;border-radius:2px;font-weight:700;margin-bottom:6px}
+.fp-hl{font-family:'Playfair Display',Georgia,serif;font-size:clamp(.95rem,3.5vw,1.25rem);font-weight:900;color:#1a1008;line-height:1.2;border-bottom:2px solid #1a1008;padding-bottom:7px;margin-bottom:6px}
+.fp-byline{font-size:.6rem;color:var(--muted);font-style:italic;margin-bottom:10px}
+.fp-art{font-size:.68rem;color:#1a1008;line-height:1.7;font-family:Georgia,serif}
+.fp-art p+p{margin-top:7px;text-indent:1em}
+.fp-facts-head{font-family:'Playfair Display',Georgia,serif;font-size:.66rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin:10px 0 5px;padding-bottom:3px;border-bottom:1.5px solid rgba(0,102,102,.2)}
+.fp-fact{font-size:.63rem;color:#1a1008;line-height:1.5;padding:3px 0 3px 8px;border-left:2px solid var(--gold);margin-bottom:4px}
+.fp-footer{border-top:1px solid var(--border);padding:5px 16px;text-align:center;font-size:.52rem;color:var(--muted);font-style:italic;background:rgba(0,0,0,.02)}
+
+/* ── COMPLETE ── */
+#completeScreen{background:var(--cream);justify-content:center}
+.comp-wrap{text-align:center;width:100%;max-width:420px}
+.comp-icon{font-size:4rem;margin-bottom:12px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.comp-h{font-size:clamp(1.8rem,6vw,2.4rem);color:var(--dark);margin-bottom:6px}
+.comp-h span{color:var(--teal)}
+.comp-sub{font-size:.9rem;color:var(--muted);max-width:340px;margin:0 auto 20px;line-height:1.6}
+.comp-tag{font-family:'Playfair Display',Georgia,serif;font-size:.9rem;font-style:italic;color:var(--gold);margin-top:18px}
+
+/* CONFETTI */
+.cw{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.cp{position:absolute;top:-12px;border-radius:2px;animation:cf linear forwards}
+@keyframes cf{0%{transform:translateY(0) rotate(0);opacity:1}85%{opacity:1}100%{transform:translateY(110vh) rotate(800deg);opacity:0}}
+
+/* Utilities */
+.gap4{gap:4px}.mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.w100{width:100%}
+.center{text-align:center}
+*:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ INTRO ═══════════ -->
+<div class="screen active" id="introScreen">
+  <div class="mast-wrap">
+    <div class="mast-rule"></div>
+    <div class="mast-eye">Cipla EMEU · Final Module</div>
+    <div class="mast-title">Cipla <em>Final</em></div>
+    <div class="mast-rule-thin"></div>
+    <div class="mast-foot"><span>Est. 1935</span><span>The Newsroom Challenge</span><span>Day 1</span></div>
+  </div>
+
+  <div class="breaking-badge"><span class="bd"></span>Breaking Assignment</div>
+  <h1 class="intro-title">You're the <span>Chief Correspondent</span></h1>
+  <p class="intro-sub">A major story about Cipla is breaking. Interview 5 sources, verify the facts, write the headline — and publish your front page.</p>
+
+  <div class="mission-box">
+    <div class="mission-lbl">Your 4-Step Assignment</div>
+    <div class="m-row"><div class="m-num">1</div>Interview all 5 sources — 4 questions each</div>
+    <div class="m-row"><div class="m-num">2</div>Answer correctly to unlock each verified fact</div>
+    <div class="m-row"><div class="m-num">3</div>Build your front-page headline</div>
+    <div class="m-row"><div class="m-num">4</div>Publish — and complete your onboarding</div>
+  </div>
+
+  <div class="src-chips" id="introChips"></div>
+  <button class="btn btn-teal" onclick="goHub()">Enter the Newsroom
+    <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- ═══════════ HUB ═══════════ -->
+<div class="screen" id="hubScreen">
+  <div class="hub-hdr">
+    <div class="hub-logo">🗞 Cipla EMEU Times</div>
+    <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Newsroom Floor</div>
+  </div>
+  <p class="hub-sub">Tap a source to start your interview. Answer all 4 questions correctly to unlock their verified fact.</p>
+
+  <div class="hub-prog-wrap">
+    <div class="hub-prog-lbl">
+      <span>Facts collected</span>
+      <span id="hubCount">0 / 5</span>
+    </div>
+    <div class="hub-prog-track"><div class="hub-prog-fill" id="hubFill"></div></div>
+  </div>
+
+  <div class="sources-list" id="srcList"></div>
+  <div class="hub-cta mt12">
+    <button class="btn btn-gold" id="hlBtn" style="display:none" onclick="goHeadline()">Write Your Headline ✍️</button>
+  </div>
+</div>
+
+<!-- ═══════════ INTERVIEW ═══════════ -->
+<div class="screen" id="ivScreen">
+  <div class="iv-nav">
+    <div class="back-btn" onclick="goHub()" title="Back to newsroom">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5m0 0l6 6m-6-6l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <span class="iv-breadcrumb" id="ivBread"></span>
+    <span class="iv-q-counter" id="ivCounter"></span>
+  </div>
+
+  <div class="iv-src-prog">
+    <div class="iv-prog-dots" id="ivDots"></div>
+  </div>
+
+  <div class="iv-char" id="ivChar">
+    <div class="iv-av" id="ivAv"></div>
+    <div>
+      <div class="iv-char-name" id="ivName"></div>
+      <div class="iv-char-dept" id="ivDept"></div>
+    </div>
+  </div>
+
+  <div class="q-bubble" id="ivQ"></div>
+  <div class="retry-note" id="retryNote"></div>
+  <div class="opts" id="ivOpts"></div>
+  <div id="ivFb"></div>
+  <div id="ivFact"></div>
+</div>
+
+<!-- ═══════════ HEADLINE ═══════════ -->
+<div class="screen" id="hlScreen">
+  <div class="hl-hdr">
+    <h2>✍️ Write Your Headline</h2>
+    <p>Select a word tile to place it in the next available slot. Tap a filled slot to remove it. Fill at least 3 slots to publish.</p>
+  </div>
+
+  <div class="np-tmpl">
+    <div class="np-mini-head">Cipla EMEU Times</div>
+    <div class="hl-hint">Your Breaking News Headline</div>
+    <div class="hl-slots" id="hlSlots"></div>
+  </div>
+
+  <p class="hl-tip">Tap tile → auto-places in next slot · Tap filled slot to remove</p>
+  <div class="tiles-pool" id="tilesPool"></div>
+  <button class="btn btn-gold" id="pubBtn" disabled onclick="goFrontPage()">Publish Story 🗞️</button>
+</div>
+
+<!-- ═══════════ FRONT PAGE ═══════════ -->
+<div class="screen" id="fpScreen">
+  <p class="fp-note">Your front page is ready. You know Cipla's story — now you're part of it.</p>
+  <div class="front-page" id="fpPage">
+    <div class="fp-head">
+      <div class="fp-title">Cipla EMEU Times</div>
+      <div class="fp-sub">Caring for Life · Est. 1935 · Your First Day Edition</div>
+    </div>
+    <div class="fp-ribbon"><span id="fpDate"></span><span>Final Module · Onboarding Edition</span><span>Vol.1 No.1</span></div>
+    <div class="fp-body">
+      <div class="fp-brk">Breaking</div>
+      <div class="fp-hl" id="fpHL"></div>
+      <div class="fp-byline">By Our New Correspondent · Cipla EMEU Times</div>
+      <div class="fp-art" id="fpArt"></div>
+      <div class="fp-facts-head">5 Verified Facts</div>
+      <div id="fpFacts"></div>
+    </div>
+    <div class="fp-footer">"Caring for life, every step of the way." — Cipla EMEU Onboarding · ALIVE Internship FY26</div>
+  </div>
+  <button class="btn btn-teal mt16" onclick="goComplete()">Complete Module
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- ═══════════ COMPLETE ═══════════ -->
+<div class="screen" id="completeScreen">
+  <div class="comp-wrap">
+    <div class="comp-icon">🏆</div>
+    <h1 class="comp-h">Story <span>Published!</span></h1>
+    <p class="comp-sub">You've verified all 5 facts and written your headline. You know Cipla's 90-year story — and from today, you're part of it.</p>
+    <button class="btn btn-teal" id="doneBtn" onclick="completeModule()">Complete Module
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p class="comp-tag">"Caring for life, every step of the way."</p>
+  </div>
+</div>
+
+<script>
+/* ═══════════ DATA ═══════════ */
+const SOURCES = [
+  {
+    id:'arch', cls:'arch', name:'The Archivist', dept:'Cipla History', emoji:'📜',
+    color:'var(--arch)', bg:'var(--arch-bg)',
+    factShort:'1935 founding · WWII drug supply · $1/day HIV treatment',
+    factFull:'Founded in 1935 as the Chemical, Industrial & Pharmaceutical Laboratories, Cipla became the largest WWII supplier of Quinine and Vitamin B12. In 2001, Dr. YK Hamied offered HIV treatment for just $1 a day — making life-saving medicine accessible to millions.',
+    qs:[
+      {
+        q:'Before being renamed Cipla Limited in 1984, what was the company\'s original full name when Dr. KA Hamied founded it in 1935?',
+        opts:['Central India Pharmaceutical Labs','Cipla Industrial & Pharmaceutical Ltd','Chemical, Industrial & Pharmaceutical Laboratories','Chemist Institute of Pharma Labs'],
+        ans:2,
+        ok:'Correct! Chemical, Industrial & Pharmaceutical Laboratories — founded with just ₹2 lakh capital and a Swadeshi vision to make India self-sufficient in medicine.',
+        no:'Not quite. Think about the three core activities the company was built to do: chemistry, industry and pharma. The original name combined all three.'
+      },
+      {
+        q:'During World War II, global medicine supply chains collapsed. Which two medicines did Cipla supply as the largest global manufacturer to Allied soldiers?',
+        opts:['Penicillin & Aspirin','Quinine & Vitamin B12','Insulin & Morphine','Streptomycin & Vitamin A'],
+        ans:1,
+        ok:'Exactly right. Quinine (for malaria) and Vitamin B12 — Cipla\'s wartime performance put it on the global map as a reliable, high-quality manufacturer.',
+        no:'Not quite. Think about what Allied troops in tropical theatres most needed — one prevents a parasitic disease, the other is a vitamin critical for nervous system function.'
+      },
+      {
+        q:'In 1995, Cipla launched Deferiprone — the world\'s first oral treatment of its kind for a blood disorder highly prevalent across South Asia and EMEU markets. What condition did it treat?',
+        opts:['Malaria','HIV/AIDS','Tuberculosis','Thalassemia — iron overload condition'],
+        ans:3,
+        ok:'Correct! Deferiprone treats iron overload in Thalassemia patients. Before this, patients had only injectable treatment options. Cipla proved generics companies could lead innovation for neglected conditions.',
+        no:'Not that condition. This was a disease largely ignored by global pharma — affecting patients who needed to regularly remove excess iron from their blood.'
+      },
+      {
+        q:'In 2001, Cipla offered its HIV cocktail at $1/day — a fraction of the $12,000/year branded price. At its peak, what percentage of AIDS patients in poor countries were on Cipla drugs?',
+        opts:['Around 10%','Around 25%','Around 40%','Around 60%'],
+        ans:2,
+        ok:'40% — an extraordinary impact. Cipla is still today the world\'s largest manufacturer of antiretroviral drugs. One company\'s decision changed global health access forever.',
+        no:'Think bigger — the impact was massive and widely reported. Cipla didn\'t just help some patients; it reached a very significant share of the world\'s most vulnerable people living with HIV.'
+      }
+    ]
+  },
+  {
+    id:'sci', cls:'sci', name:'The Scientist', dept:'Pharma 101', emoji:'🔬',
+    color:'var(--sci)', bg:'var(--sci-bg)',
+    factShort:'1,500+ products · API science · Bioequivalence proven generics',
+    factFull:'Cipla is a world-leading generic pharmaceutical company. Every product begins with an Active Pharmaceutical Ingredient (API) and must pass bioequivalence studies before reaching patients. Today Cipla makes 1,500+ products across 50+ dosage forms worldwide.',
+    qs:[
+      {
+        q:'A tablet contains Paracetamol 500mg — the ingredient that actually treats the pain. What is this active ingredient specifically called in pharma terminology?',
+        opts:['Excipient','Dosage Form','API — Active Pharmaceutical Ingredient','Formulation'],
+        ans:2,
+        ok:'Spot on. API — Active Pharmaceutical Ingredient. The molecule that does the actual therapeutic work. Everything else (binders, colours, coatings) simply supports it.',
+        no:'Not quite. An excipient supports — starch, lactose, binders. A formulation is the complete product. A dosage form is how it\'s delivered. The active molecule that treats the disease has its own specific name.'
+      },
+      {
+        q:'For a Cipla generic to receive regulatory approval, it must prove it behaves identically to the branded drug in the human body. What is this critical scientific study called?',
+        opts:['Bioequivalence study','Biodegradability test','Bioavailability index','Pharmaceutical equivalence audit'],
+        ans:0,
+        ok:'Perfect. Bioequivalence — proving the generic is absorbed at the same rate and to the same extent as the branded drug. This is the scientific foundation of Cipla\'s promise to every patient.',
+        no:'Close but not the exact term regulators require. The study specifically compares two drugs\' biological equivalence — their absorption profiles must match within an approved 80–125% range.'
+      },
+      {
+        q:'Drug development passes through 4 clinical trial phases. Which phase is the FIRST to test the drug on actual patients with the target disease — not just healthy volunteers?',
+        opts:['Phase IV — post-market surveillance','Phase II — medium patient groups','Phase I — first-in-human studies','Phase III — large multi-country trials'],
+        ans:1,
+        ok:'Correct! Phase II. Phase I uses healthy volunteers to assess safety and dosing. Phase II is when the drug first meets patients with the actual condition — testing whether it actually works.',
+        no:'Not that phase. Phase I is healthy volunteers — just testing safety. Phase IV is after approval in the general public. Think about which phase first puts the drug in front of patients with the actual disease.'
+      },
+      {
+        q:'Looking at real price data: generic Paracetamol costs ₹2.45 per tablet while branded Crocin costs ₹11. This makes the generic approximately how many times more affordable?',
+        opts:['Twice as affordable','About 3 times more affordable','About 4.5 times more affordable','About 10 times more affordable'],
+        ans:2,
+        ok:'Correct — approximately 4.5 times cheaper. This price difference is not an anomaly; it\'s consistent across therapy areas. And it\'s exactly why Cipla\'s generic model has such profound patient impact.',
+        no:'Do the maths: ₹11 divided by ₹2.45 = approximately? The difference is more striking than most people expect — and it\'s why affordable generics change lives.'
+      }
+    ]
+  },
+  {
+    id:'exp', cls:'exp', name:'The Explorer', dept:'EMEU Overview', emoji:'🌍',
+    color:'var(--exp)', bg:'var(--exp-bg)',
+    factShort:'16+ countries · 6 clusters · 50% B2B and 50% D2C',
+    factFull:'Cipla EMEU spans 16+ countries across 6 regional clusters — Europe, Latin America, Australia & NZ, Asia, Middle East and China. The region operates a 50% B2B and 50% D2C commercial model to reach patients across the globe.',
+    qs:[
+      {
+        q:'Cipla EMEU operates across 6 regional clusters. Which of these is NOT one of the 6 EMEU clusters?',
+        opts:['Latin America','Middle East','North America','Australia & New Zealand'],
+        ans:2,
+        ok:'Correct — North America is not an EMEU cluster. The six EMEU clusters are: Europe, Latin America, Australia & NZ, Asia, Middle East and China. North America is a separate business segment.',
+        no:'That one IS an EMEU cluster. Think about which major region in the Americas is a separate commercial segment for Cipla — not part of the EMEU portfolio.'
+      },
+      {
+        q:'The regulatory body that approves medicines in the UK, and whose standards significantly influence acceptance in other EMEU markets, is called the...',
+        opts:['FDA','TGA','MHRA','ANVISA'],
+        ans:2,
+        ok:'MHRA — Medicines and Healthcare Products Regulatory Agency. UK-based, globally respected. Cipla\'s MHRA approval often streamlines acceptance in other markets that follow European standards.',
+        no:'That\'s another regulator — FDA is USA, TGA is Australia, ANVISA is Brazil. Think about which UK-based authority governs medicine approval in one of Cipla\'s most important European markets.'
+      },
+      {
+        q:'Cipla EMEU operates a 50/50 split between B2B and D2C commercial models. Which statement BEST describes where D2C tends to be stronger?',
+        opts:['D2C is strongest in emerging markets where distributors are expensive','D2C is most relevant in developed EMEU markets with direct pharmacy and hospital access','D2C is exclusively used in Latin American markets','D2C is only relevant for OTC products sold online'],
+        ans:1,
+        ok:'Correct. D2C is strongest in developed markets — UK, Germany, Australia — where direct relationships with pharmacy chains and hospital groups are commercially advantageous and logistics infrastructure supports it.',
+        no:'Think about where the infrastructure, pharmacy chains and hospital procurement systems are most sophisticated. Developed EMEU markets allow Cipla to bypass intermediaries and build direct customer relationships.'
+      },
+      {
+        q:'Brazil is Cipla\'s largest Latin American market. Which regulatory authority must approve all Cipla products before they can be sold in Brazil?',
+        opts:['ANVISA','COFEPRIS','INVIMA','ISP'],
+        ans:0,
+        ok:'ANVISA — Agência Nacional de Vigilância Sanitária. Brazil\'s national health regulatory body. COFEPRIS is Mexico, INVIMA is Colombia, ISP is Chile — each EMEU country has its own authority.',
+        no:'Not quite. COFEPRIS is Mexico, INVIMA is Colombia, ISP is Chile. Brazil\'s regulatory agency has a distinctive name that reflects its national health surveillance mandate.'
+      }
+    ]
+  },
+  {
+    id:'ppl', cls:'ppl', name:'The People Partner', dept:'EVP & Purpose', emoji:'💜',
+    color:'var(--ppl)', bg:'var(--ppl-bg)',
+    factShort:'Make Every Life Thrive · GPTW 7 years · 91% engagement',
+    factFull:"Cipla's Employee Value Proposition is 'Make Every Life Thrive' — built on three pillars: Inspiring Pioneers, Championing Care and Nourishing Careers. Cipla has been certified as a Great Place to Work for 7 consecutive years, with a 91% employee engagement score.",
+    qs:[
+      {
+        q:'Cipla\'s Employee Value Proposition is built on three pillars. Which of the following is NOT one of the three EVP pillars?',
+        opts:['Inspiring Pioneers','Championing Care','Digital Excellence','Nourishing Careers'],
+        ans:2,
+        ok:'Correct — Digital Excellence is not an EVP pillar. The three pillars are: Inspiring Pioneers (growth & innovation), Championing Care (wellbeing & belonging) and Nourishing Careers (development & future).',
+        no:'That one IS an EVP pillar. Cipla\'s three pillars speak to how it inspires people, cares for them holistically and nurtures their professional growth. Which option doesn\'t fit that language?'
+      },
+      {
+        q:'The OneCipla Credo has 5 values. The first four are Purpose, Responsibility, Innovation and Excellence. What is the fifth and final value?',
+        opts:['Inclusion','Impact','Integrity & Trust','Initiative'],
+        ans:2,
+        ok:'Correct — Integrity & Trust. Anchored, as the Credo describes it. And cleverly, the leadership behaviours (Collaborate, Innovate, Perform, Lead, Act) spell out C.I.P.L.A. — the company name itself.',
+        no:'Not that value. The fifth value is described as being "anchored" — it speaks to ethical behaviour and building trust with all stakeholders: patients, employees, partners and regulators.'
+      },
+      {
+        q:"Cipla's flagship campus program is called ALIVE — a 6-month experiential learning journey for Management Professionals. What does the acronym ALIVE stand for?",
+        opts:['Achieve, Lead, Inspire, Value, Excel','Aspire, Learn, Innovate, Voice, Engage','Accelerate, Learn, Integrate, Validate, Excel','Aspire, Lead, Innovate, Value, Empower'],
+        ans:1,
+        ok:'Aspire, Learn, Innovate, Voice, Engage. In FY2024-25, ALIVE welcomed 73 new hires across Technical, M&Q and Young Managers tracks. This is the program that brought you here.',
+        no:'Not quite. The acronym captures the spirit of what Cipla wants from its young talent — ambition, learning, innovation, speaking up and active participation. Think about those themes.'
+      },
+      {
+        q:"Cipla supports employee wellbeing across three dimensions: Mental, Physical and Financial. The 'MiEarned Salary' program — which allows emergency salary withdrawals before payday — addresses which dimension?",
+        opts:['Mental wellbeing','Physical wellbeing','Financial wellbeing','Social wellbeing'],
+        ans:2,
+        ok:'Financial wellbeing — exactly. Alongside MiCare Fund and All Things Money (ATM) tools, MiEarned Salary helps employees manage financial stress without waiting for month-end. Real support for real life.',
+        no:'Think about what a salary advance is for — it addresses a specific type of stress that millions of employees face. Which wellbeing category does managing money and financial emergencies fall under?'
+      }
+    ]
+  },
+  {
+    id:'ins', cls:'ins', name:'The Insider', dept:'Cipla Ecosystem', emoji:'⚙️',
+    color:'var(--ins)', bg:'var(--ins-bg)',
+    factShort:'17 departments · 3 layers · 12-stage value chain',
+    factFull:'Cipla EMEU runs on 17 interconnected departments across 3 layers — Strategic, Operational and Enabling — working through a 12-stage commercial value chain to get medicine from portfolio decision to patient, every single day.',
+    qs:[
+      {
+        q:"The Cipla EMEU commercial value chain has 12 stages. Which stage comes immediately AFTER 'Shipping & Logistics' in the correct chain sequence?",
+        opts:['Import & Customs Clearance','In-Market Warehouse','Order Placement','Outbound Warehouse'],
+        ans:0,
+        ok:'Import & Customs Clearance — exactly right. After international freight arrives in the EMEU country, every shipment must pass through customs with proper import documentation before it can reach the local warehouse.',
+        no:'Think about the physical journey: the shipment has just arrived in the destination country by air or sea freight. What must happen before the goods can be moved to a local warehouse?'
+      },
+      {
+        q:"Cipla EMEU's 17 departments are organised into 3 layers. Which of these is an 'Enabling Layer' department — one that powers the entire ecosystem?",
+        opts:['Regulatory Affairs','Sales','Digital Transformation','Commercial Excellence'],
+        ans:2,
+        ok:'Digital Transformation — correct. Along with HR, EMEU Finance and Special Projects, Digital Transformation sits in the Enabling Layer. It powers all other departments with CRM, ERP, analytics and the D2C platform.',
+        no:'Regulatory Affairs, Sales and Commercial Excellence all sit in the Operational Layer — they directly touch the value chain stages. The Enabling Layer supports from below, without owning a specific stage.'
+      },
+      {
+        q:"Sales Force Effectiveness (SFE) sits in the Demand Creation layer. Which statement BEST describes what SFE does at Cipla EMEU?",
+        opts:['Directly sells products to pharmacies and hospitals','Sets pricing strategy and manages commercial contracts','Optimises the sales force — territory planning, CRM, targeting and productivity analytics','Handles import documentation and customs clearance'],
+        ans:2,
+        ok:'Exactly right. SFE doesn\'t sell — Sales does. SFE makes the sales team sharper: right territories, right targets, right tools, right coverage. Think of them as the performance coaches behind the front line.',
+        no:'That\'s a different department. Sales owns the customer relationship. Commercial Excellence owns pricing and contracts. Regulatory owns import documentation. SFE sits one step back — making the sales machine more effective.'
+      },
+      {
+        q:"Business Planning sits at the critical junction between commercial demand and manufacturing supply. What is the primary cross-functional process Business Planning uses to align these two sides monthly?",
+        opts:['S&OP — Sales & Operations Planning','CRM — Customer Relationship Management','NPI — New Product Introduction process','KPI review with the commercial team'],
+        ans:0,
+        ok:'S&OP — Sales & Operations Planning. A monthly process where Business Planning aligns the commercial demand forecast with manufacturing capacity and supply availability. Without it, stockouts and overstock both happen.',
+        no:'CRM is a tool Sales uses for customer relationships. NPI is for launching new products. KPI reviews are performance tracking. Think about what monthly process could systematically bridge commercial demand signals with manufacturing reality.'
+      }
+    ]
+  }
+];
+
+const TILES = [
+  'CIPLA · SINCE 1935','$1/DAY HIV TREATMENT','CARING FOR LIFE',
+  'MAKE EVERY LIFE THRIVE','EMEU · 16+ COUNTRIES','17 DEPARTMENTS',
+  '90 YEARS STRONG','AFFORDABLE GENERICS','12-STAGE VALUE CHAIN',
+  '1,500+ PRODUCTS','GREAT PLACE TO WORK','GENERIC PIONEER'
+];
+
+const ARTICLE = [
+  "Cipla Limited, founded in 1935 by Dr. Khwaja Abdul Hamied with just ₹2 lakh in capital, has grown over nine decades into one of the world's most consequential pharmaceutical companies — making medicine accessible when the world said it was impossible.",
+  "The company's defining moment came in 2001, when Dr. YK Hamied offered a triple-drug HIV cocktail for just $1 a day — a price that stunned multinational pharma and saved millions of lives. Today, Cipla's EMEU region spans 16+ countries across six clusters, powered by 17 departments and a 12-stage value chain.",
+  "With an Employee Value Proposition of 'Make Every Life Thrive', Great Place to Work certification for seven consecutive years, and 1,500+ products across 50+ dosage forms, Cipla's story is one of science, purpose and relentless care."
+];
+
+/* ═══════════ STATE ═══════════ */
+let collected = [];
+let curSrc = null, curQIdx = 0, answeredCount = 0;
+let hlWords = [null,null,null,null];
+let activeTile = null;
+
+/* ═══════════ SCREENS ═══════════ */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none'});
+  const el = document.getElementById(id);
+  el.style.display = 'flex';
+  el.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ═══════════ INTRO ═══════════ */
+function buildIntroChips(){
+  const c = document.getElementById('introChips');
+  c.innerHTML = '';
+  SOURCES.forEach(s=>{
+    const chip = document.createElement('div');
+    chip.className = 'src-chip';
+    chip.style.cssText = `background:${s.bg};border-color:${s.color === 'var(--arch)' ? '#ef9a9a' : s.color === 'var(--sci)' ? '#80cbc4' : s.color === 'var(--exp)' ? '#ffcc80' : s.color === 'var(--ppl)' ? '#ce93d8' : '#90caf9'};color:${s.color}`;
+    chip.innerHTML = `${s.emoji} ${s.name}`;
+    c.appendChild(chip);
+  });
+}
+
+/* ═══════════ HUB ═══════════ */
+function goHub(){
+  renderSrcList();
+  updateHubProgress();
+  document.getElementById('hlBtn').style.display = collected.length >= 5 ? 'inline-flex' : 'none';
+  show('hubScreen');
+}
+
+function renderSrcList(){
+  const list = document.getElementById('srcList');
+  list.innerHTML = '';
+  SOURCES.forEach(s=>{
+    const done = collected.includes(s.id);
+    const card = document.createElement('div');
+    card.className = `src-card ${s.cls}${done?' done':''}`;
+    card.innerHTML = `
+      <div class="src-emo">${s.emoji}</div>
+      <div class="src-info">
+        <div class="src-name">${s.name}</div>
+        <div class="src-dept">${s.dept} · 4 Questions</div>
+      </div>
+      <div class="src-pill">${done?'✓ Verified':'Interview →'}</div>
+    `;
+    if(!done) card.onclick = ()=>startIv(s.id);
+    list.appendChild(card);
+  });
+}
+
+function updateHubProgress(){
+  const n = collected.length;
+  document.getElementById('hubCount').textContent = `${n} / 5`;
+  document.getElementById('hubFill').style.width = (n/5*100)+'%';
+}
+
+/* ═══════════ INTERVIEW ═══════════ */
+function startIv(srcId){
+  curSrc = SOURCES.find(s=>s.id===srcId);
+  curQIdx = 0;
+  answeredCount = 0;
+  loadQ();
+  show('ivScreen');
+}
+
+function loadQ(){
+  const s = curSrc, q = s.qs[curQIdx], total = s.qs.length;
+
+  // Nav
+  document.getElementById('ivBread').textContent = `${s.emoji} ${s.name}`;
+  document.getElementById('ivCounter').textContent = `Q${curQIdx+1} of ${total}`;
+
+  // Dots
+  const dots = document.getElementById('ivDots');
+  dots.innerHTML = '';
+  for(let i=0;i<total;i++){
+    const d = document.createElement('div');
+    d.className = `pdot${i<curQIdx?' done':i===curQIdx?' cur':''}`;
+    dots.appendChild(d);
+  }
+
+  // Character header
+  const charEl = document.getElementById('ivChar');
+  charEl.className = `iv-char ${s.cls}`;
+  document.getElementById('ivAv').textContent = s.emoji;
+  document.getElementById('ivName').textContent = s.name;
+  document.getElementById('ivDept').textContent = s.dept;
+
+  // Question
+  document.getElementById('ivQ').textContent = q.q;
+  document.getElementById('retryNote').textContent = '';
+  document.getElementById('ivFb').innerHTML = '';
+  document.getElementById('ivFact').innerHTML = '';
+
+  // Options
+  const optsEl = document.getElementById('ivOpts');
+  optsEl.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.opts.forEach((o,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-ltr">${letters[i]}</span>${o}`;
+    btn.onclick = ()=>answerQ(i, btn);
+    optsEl.appendChild(btn);
+  });
+}
+
+function answerQ(idx, btnEl){
+  const s = curSrc, q = s.qs[curQIdx];
+  const allOpts = document.querySelectorAll('.opt');
+  const correct = idx === q.ans;
+
+  if(!correct){
+    // Mark wrong, keep others active
+    btnEl.classList.add('wrong');
+    document.getElementById('ivFb').innerHTML = `<div class="iv-fb show-err">✗ ${q.no}</div>`;
+    document.getElementById('retryNote').textContent = '⚠ Try again — you must answer correctly to continue.';
+    // Re-enable non-wrong options after a moment
+    setTimeout(()=>{
+      allOpts.forEach(b=>{if(!b.classList.contains('wrong'))b.classList.remove('locked')});
+      document.getElementById('ivFb').innerHTML = '';
+    }, 1600);
+    return;
+  }
+
+  // Correct — lock all
+  allOpts.forEach(b=>b.classList.add('locked'));
+  btnEl.classList.add('correct');
+  document.getElementById('retryNote').textContent = '';
+  document.getElementById('ivFb').innerHTML = `<div class="iv-fb show-ok">✓ ${q.ok}</div>`;
+  confetti(8);
+
+  setTimeout(()=>{
+    if(curQIdx < s.qs.length - 1){
+      curQIdx++;
+      loadQ();
+    } else {
+      showFact();
+    }
+  }, 1600);
+}
+
+function showFact(){
+  const s = curSrc;
+  document.getElementById('ivOpts').innerHTML = '';
+  document.getElementById('ivFb').innerHTML = '';
+  document.getElementById('retryNote').textContent = '';
+  document.getElementById('ivCounter').textContent = '✓ All 4 Done!';
+
+  // Update all dots to done
+  const dots = document.getElementById('ivDots');
+  dots.innerHTML = '';
+  for(let i=0;i<s.qs.length;i++){
+    const d = document.createElement('div');
+    d.className = 'pdot done';
+    dots.appendChild(d);
+  }
+
+  document.getElementById('ivFact').innerHTML = `
+    <div class="fact-card">
+      <div class="fact-lbl">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+        Fact Verified — ${s.name}
+      </div>
+      <div class="fact-body">"${s.factFull}"</div>
+    </div>
+  `;
+
+  if(!collected.includes(s.id)) collected.push(s.id);
+  confetti(25);
+
+  setTimeout(()=>{
+    const nb = document.createElement('button');
+    nb.className = 'btn btn-teal mt12';
+    nb.innerHTML = `${collected.length>=5?'← Back to Newsroom ✓':'← Back to Newsroom →'}`;
+    nb.onclick = ()=>goHub();
+    document.getElementById('ivFact').appendChild(nb);
+  }, 700);
+}
+
+/* ═══════════ HEADLINE ═══════════ */
+function goHeadline(){
+  activeTile = null;
+  renderHlSlots();
+  renderTiles();
+  show('hlScreen');
+}
+
+function renderHlSlots(){
+  const box = document.getElementById('hlSlots');
+  box.innerHTML = '';
+  hlWords.forEach((w,i)=>{
+    const s = document.createElement('div');
+    s.className = `hl-slot${w?' filled':''}`;
+    s.dataset.idx = i;
+    s.textContent = w || '— — —';
+    s.onclick = ()=>slotClick(i);
+    box.appendChild(s);
+  });
+  checkPub();
+}
+
+function renderTiles(){
+  const pool = document.getElementById('tilesPool');
+  pool.innerHTML = '';
+  TILES.forEach(t=>{
+    const used = hlWords.includes(t);
+    const el = document.createElement('div');
+    el.className = `tile${used?' used':''}${activeTile===t?' active':''}`;
+    el.textContent = t;
+    el.onclick = ()=>tileClick(t, el);
+    pool.appendChild(el);
+  });
+}
+
+function tileClick(t, el){
+  if(el.classList.contains('used')) return;
+  if(activeTile===t){activeTile=null;renderTiles();return}
+  activeTile = t;
+  renderTiles();
+  const emptyIdx = hlWords.findIndex(w=>w===null);
+  if(emptyIdx !== -1){
+    hlWords[emptyIdx] = t;
+    activeTile = null;
+    renderHlSlots();
+    renderTiles();
+  }
+}
+
+function slotClick(idx){
+  if(hlWords[idx]){hlWords[idx]=null;renderHlSlots();renderTiles()}
+}
+
+function checkPub(){
+  document.getElementById('pubBtn').disabled = hlWords.filter(w=>w!==null).length < 3;
+}
+
+/* ═══════════ FRONT PAGE ═══════════ */
+function goFrontPage(){
+  const now = new Date();
+  document.getElementById('fpDate').textContent = now.toLocaleDateString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+  document.getElementById('fpHL').textContent = hlWords.filter(w=>w).join(' · ');
+  document.getElementById('fpArt').innerHTML = ARTICLE.map(p=>`<p>${p}</p>`).join('');
+  const fl = document.getElementById('fpFacts');
+  fl.innerHTML = collected.map(id=>{const s=SOURCES.find(x=>x.id===id);return `<div class="fp-fact">${s.emoji} ${s.factShort}</div>`}).join('');
+  show('fpScreen');
+  setTimeout(()=>confetti(40), 500);
+}
+
+/* ═══════════ COMPLETE ═══════════ */
+function goComplete(){
+  show('completeScreen');
+  confetti(70);
+}
+
+function completeModule(){
+  window.parent.postMessage({type:'MODULE_COMPLETED', module:'module7'}, '*');
+  const b = document.getElementById('doneBtn');
+  b.textContent = '✓ Module Completed!';
+  b.style.background = 'linear-gradient(135deg,#2a8c6a,#34b87e)';
+  b.style.pointerEvents = 'none';
+}
+
+/* ═══════════ CONFETTI ═══════════ */
+function confetti(n){
+  const w=document.createElement('div');w.className='cw';document.body.appendChild(w);
+  const cols=['#006666','#c8902a','#e8b960','#e53935','#8e24aa','#f57c00','#1565c0','#2a8c6a','#ffffff'];
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');p.className='cp';
+    p.style.left=Math.random()*100+'%';
+    p.style.background=cols[~~(Math.random()*cols.length)];
+    p.style.width=(5+Math.random()*9)+'px';
+    p.style.height=(5+Math.random()*9)+'px';
+    p.style.borderRadius=Math.random()>.5?'50%':'2px';
+    p.style.animationDuration=(1.4+Math.random()*1.6)+'s';
+    p.style.animationDelay=Math.random()*.8+'s';
+    w.appendChild(p);
+  }
+  setTimeout(()=>w.remove(),3800);
+}
+
+/* ═══════════ INIT ═══════════ */
+buildIntroChips();
+</script>
+</body>
+</html>
