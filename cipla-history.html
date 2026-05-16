@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cipla Journey — Timeline Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #006666;
+  --dark: #002e2e;
+  --gold: #c8902a;
+  --gold-light: #e8b960;
+  --cream: #faf8f4;
+  --warm: #fdfcf9;
+  --border: #d8d3ca;
+  --muted: #6e6e6e;
+  --success: #2a8c6a;
+  --success-light: #e6f5ee;
+  --error: #c0392b;
+  --error-light: #fdeaea;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: linear-gradient(170deg, #faf8f4 0%, #f0ede6 50%, #e8e3d9 100%);
+  color: var(--dark);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; }
+
+/* ===== SCREENS ===== */
+.screen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  transform: scale(0.97);
+  z-index: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.screen.active { opacity: 1; pointer-events: all; transform: scale(1); }
+
+/* subtle texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    radial-gradient(circle at 15% 85%, rgba(0,102,102,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, rgba(200,144,42,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* =============== INTRO SCREEN =============== */
+.intro {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  padding-top: clamp(40px, 10vh, 90px);
+  padding-bottom: 48px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.intro-icon {
+  width: 90px; height: 90px;
+  margin-bottom: 20px;
+  animation: gentleFloat 3.5s ease-in-out infinite;
+}
+@keyframes gentleFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+.intro-badge {
+  display: inline-block;
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 3px; font-weight: 700;
+  color: var(--teal);
+  background: rgba(0,102,102,0.06);
+  padding: 6px 18px; border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.intro h1 {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  color: var(--dark); line-height: 1.15;
+  margin-bottom: 10px;
+}
+.intro h1 span { color: var(--teal); }
+
+.intro-sub {
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+  color: var(--muted); max-width: 460px;
+  line-height: 1.65; margin-bottom: 12px;
+}
+
+.intro-instruction {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; color: var(--gold);
+  background: rgba(200,144,42,0.06);
+  padding: 10px 20px; border-radius: 12px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(200,144,42,0.12);
+}
+.intro-instruction svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px; border: none; border-radius: 50px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--teal), #008078);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(0,102,102,0.28);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(0,102,102,0.32); }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), #d9a840);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(200,144,42,0.28);
+}
+.btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(200,144,42,0.32); }
+.btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* =============== GAME SCREEN =============== */
+.game {
+  justify-content: flex-start;
+  padding: 12px 16px;
+  gap: 0;
+}
+
+/* -- Top bar -- */
+.game-header {
+  width: 100%; max-width: 900px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px; flex-shrink: 0;
+}
+.game-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--dark);
+}
+.score-display {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.8rem; font-weight: 600; color: var(--muted);
+}
+.score-display .score-num {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem; color: var(--teal); font-weight: 700;
+}
+
+.progress-bar-wrap {
+  width: 100%; max-width: 900px;
+  height: 6px; background: var(--border);
+  border-radius: 3px; overflow: hidden;
+  margin-bottom: 14px; flex-shrink: 0;
+}
+.progress-bar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* -- Main game area -- */
+.game-area {
+  display: flex;
+  gap: 20px;
+  width: 100%; max-width: 900px;
+  flex: 1; min-height: 0;
+}
+
+/* -- Timeline column -- */
+.timeline-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  padding: 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.timeline-col::-webkit-scrollbar { width: 4px; }
+.timeline-col::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.timeline-slot {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  min-height: 52px;
+  position: relative;
+}
+
+/* year label */
+.year-label {
+  width: 80px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--dark);
+  position: relative;
+}
+/* timeline line + dot */
+.year-label::after {
+  content: '';
+  position: absolute; right: -1px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.year-label::before {
+  content: '';
+  position: absolute; right: -5px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--warm);
+  border: 2px solid var(--border);
+  z-index: 2;
+  transition: all 0.3s;
+}
+.timeline-slot.matched .year-label::before {
+  background: var(--success);
+  border-color: var(--success);
+  box-shadow: 0 0 0 4px rgba(42,140,106,0.15);
+}
+
+/* drop zone */
+.drop-zone {
+  flex: 1;
+  min-height: 48px;
+  margin: 3px 0 3px 16px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  transition: all 0.25s;
+  position: relative;
+  background: rgba(253,252,249,0.5);
+}
+.drop-zone.drag-over {
+  border-color: var(--teal);
+  background: rgba(0,102,102,0.04);
+  box-shadow: 0 0 0 4px rgba(0,102,102,0.06);
+  transform: scale(1.02);
+}
+.drop-zone.matched-correct {
+  border-color: var(--success);
+  background: var(--success-light);
+  border-style: solid;
+}
+.drop-zone.matched-wrong {
+  border-color: var(--error);
+  background: var(--error-light);
+  border-style: solid;
+  animation: shakeSlot 0.45s ease;
+}
+@keyframes shakeSlot {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.drop-zone.has-card { border-style: solid; border-color: var(--success); }
+
+.drop-placeholder {
+  font-size: 0.72rem; color: var(--border);
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+/* placed card inside drop zone */
+.placed-event {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%;
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--dark);
+  pointer-events: none;
+}
+.placed-event .placed-icon {
+  width: 28px; height: 28px; flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.placed-event .placed-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+
+/* -- Events column (card tray) -- */
+.events-col {
+  width: 240px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  padding: 4px 4px 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.events-col::-webkit-scrollbar { width: 4px; }
+.events-col::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.tray-label {
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--muted);
+  font-weight: 700; margin-bottom: 4px;
+  text-align: center;
+}
+
+.event-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: var(--warm);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  cursor: grab;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--dark);
+  transition: all 0.25s;
+  touch-action: none;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,46,46,0.04);
+}
+.event-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 4px 16px rgba(0,102,102,0.1);
+  transform: translateY(-2px);
+}
+.event-card:active, .event-card.dragging {
+  cursor: grabbing;
+  box-shadow: 0 8px 28px rgba(0,102,102,0.18);
+  transform: scale(1.04);
+  z-index: 100;
+  border-color: var(--teal);
+  opacity: 0.92;
+}
+.event-card.placed {
+  opacity: 0.35;
+  pointer-events: none;
+  transform: scale(0.95);
+  border-style: dashed;
+}
+.event-card .card-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0,102,102,0.04);
+}
+.event-card .card-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+.event-card .grip {
+  margin-left: auto; flex-shrink: 0;
+  opacity: 0.3;
+}
+.event-card .grip svg { width: 14px; height: 14px; }
+
+/* -- Ghost (dragging clone) -- */
+.drag-ghost {
+  position: fixed;
+  padding: 10px 16px;
+  background: var(--warm);
+  border: 2px solid var(--teal);
+  border-radius: 12px;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--dark);
+  box-shadow: 0 12px 40px rgba(0,102,102,0.2);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  opacity: 0.95;
+  max-width: 220px;
+  display: flex; align-items: center; gap: 8px;
+}
+.drag-ghost img { width: 24px; height: 24px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+
+/* -- Check button -- */
+.check-bar {
+  width: 100%; max-width: 900px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.feedback-toast {
+  position: fixed;
+  bottom: 80px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 12px 28px;
+  border-radius: 14px;
+  font-size: 0.88rem; font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+  z-index: 500;
+  display: flex; align-items: center; gap: 8px;
+}
+.feedback-toast.show {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+.feedback-toast.success {
+  background: var(--success); color: #fff;
+  box-shadow: 0 6px 24px rgba(42,140,106,0.3);
+}
+.feedback-toast.error {
+  background: var(--error); color: #fff;
+  box-shadow: 0 6px 24px rgba(192,57,43,0.3);
+}
+.feedback-toast svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* =============== COMPLETE SCREEN =============== */
+.complete {
+  text-align: center; gap: 0;
+  justify-content: flex-start;
+  padding-top: clamp(32px, 6vh, 60px);
+  padding-bottom: 48px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
+.complete-trophy {
+  width: 100px; height: 100px;
+  margin-bottom: 20px;
+  animation: gentleFloat 3.5s ease-in-out infinite;
+}
+
+.complete h1 {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+.complete h1 span { color: var(--teal); }
+.complete-sub {
+  font-size: 0.95rem; color: var(--muted);
+  margin-bottom: 24px; max-width: 400px; line-height: 1.6;
+}
+
+.timeline-recap {
+  display: flex; flex-direction: column;
+  gap: 0;
+  max-width: 540px; width: 100%;
+  margin-bottom: 28px;
+  position: relative;
+}
+.timeline-recap::before {
+  content: '';
+  position: absolute;
+  left: 109px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--teal), var(--gold));
+  border-radius: 1px;
+}
+.recap-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 8px 0;
+  opacity: 0;
+  animation: recapSlide 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes recapSlide {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.recap-year {
+  width: 80px; flex-shrink: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--teal);
+  text-align: right;
+  padding-top: 4px;
+}
+.recap-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--warm);
+  box-shadow: 0 0 0 2px var(--gold);
+  flex-shrink: 0;
+  z-index: 2;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.recap-text {
+  flex: 1; display: flex; flex-direction: column; gap: 3px;
+}
+.recap-event {
+  font-size: 0.82rem; font-weight: 700;
+  color: var(--dark);
+  text-align: left;
+  line-height: 1.3;
+}
+.recap-detail {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: left;
+  line-height: 1.45;
+}
+
+.complete-tagline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem; font-style: italic;
+  color: var(--gold);
+  margin-top: 20px;
+}
+
+/* ===== CONFETTI ===== */
+.confetti-wrap {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 9999;
+  overflow: hidden;
+}
+.confetti-p {
+  position: absolute; top: -12px;
+  border-radius: 2px;
+  animation: cFall linear forwards;
+}
+@keyframes cFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(800deg); opacity: 0; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 750px) {
+  /* ── Game screen: fixed, two independent scrolling panels ── */
+  .screen.game {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    padding: 10px 12px 8px;
+    justify-content: flex-start;
+  }
+
+  /* ── Complete/Intro screens: start from top, full scroll ── */
+  .screen.complete,
+  .screen.intro {
+    padding-top: 28px;
+    padding-bottom: 36px;
+  }
+
+  .game-area {
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* ── Panel 1: Events tray — horizontal single-row swipe ── */
+  .events-col {
+    order: -1;
+    width: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;            /* single row — swipe horizontally */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    gap: 6px;
+    padding: 4px 10px 10px;
+    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .events-col::-webkit-scrollbar { display: none; }
+
+  /* ── Panel 2: Timeline — takes remaining height, vertical scroll ── */
+  .timeline-col {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    scroll-behavior: smooth;
+    padding: 2px 0 16px;
+    scrollbar-width: none;
+  }
+  .timeline-col::-webkit-scrollbar { display: none; }
+
+  .tray-label { width: 100%; text-align: center; font-size: 0.6rem; margin-bottom: 2px; flex-shrink: 0; }
+
+  /* Bigger touch targets */
+  .timeline-slot { min-height: 60px; }
+  .year-label { width: 64px; font-size: 0.76rem; }
+  .drop-zone { margin-left: 8px; min-height: 50px; border-radius: 10px; padding: 8px 10px; }
+  .drop-placeholder { font-size: 0.65rem; }
+
+  /* Cards in horizontal tray: don't shrink, snap to start */
+  .event-card {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    font-size: 0.73rem;
+    padding: 8px 11px;
+    gap: 7px;
+    touch-action: manipulation;
+    max-width: 160px;
+  }
+  .event-card .card-icon { width: 26px; height: 26px; }
+  .event-card .grip { display: none; }
+
+  /* Tap-selected card */
+  .event-card.tap-selected {
+    border-color: var(--teal);
+    background: rgba(0,102,102,.08);
+    box-shadow: 0 0 0 3px rgba(0,102,102,.15);
+    transform: scale(1.04);
+  }
+  /* Pulsing drop zones when card is selected */
+  .drop-zone.tap-ready {
+    border-color: var(--teal);
+    background: rgba(0,102,102,.05);
+    animation: tapPulse 0.9s ease-in-out infinite;
+  }
+  @keyframes tapPulse {
+    0%,100% { box-shadow: none; }
+    50% { box-shadow: 0 0 0 4px rgba(0,102,102,.1); }
+  }
+
+  /* Tap banner */
+  .tap-banner {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: var(--teal);
+    background: rgba(0,102,102,.05);
+    border: 1px solid rgba(0,102,102,.14);
+    border-radius: 8px;
+    padding: 6px 12px;
+    margin-bottom: 6px;
+    width: 100%;
+    flex-shrink: 0;
+  }
+  .tap-banner svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Scroll hint: faint right-fade on card tray */
+  .events-col::after {
+    content: '';
+    position: sticky;
+    right: 0;
+    flex-shrink: 0;
+    width: 24px;
+    min-width: 24px;
+    background: linear-gradient(to right, transparent, rgba(253,252,249,0.95));
+    pointer-events: none;
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-card { font-size: 0.68rem; padding: 7px 10px; gap: 5px; max-width: 140px; }
+  .year-label { width: 56px; font-size: 0.68rem; }
+  .drop-zone { min-height: 46px; }
+  .game-title { font-size: 0.88rem; }
+  .recap-year { font-size: 0.75rem; width: 72px; padding-top: 3px; }
+  .recap-event { font-size: 0.75rem; }
+  .recap-detail { font-size: 0.68rem; }
+  .recap-dot { width: 28px; height: 28px; margin-top: 2px; }
+  .timeline-recap::before { left: 101px; }
+  .complete h1 { font-size: 1.7rem; }
+  .complete-sub { font-size: 0.85rem; }
+}
+
+*:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ================== INTRO ================== -->
+<div class="screen intro active" id="introScreen">
+  <div class="intro-icon">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="45" cy="45" r="38" stroke="#006666" stroke-width="3" fill="rgba(0,102,102,0.04)" stroke-dasharray="6 4"/>
+      <path d="M30 45h30M45 30v30" stroke="#006666" stroke-width="2.5" stroke-linecap="round" opacity="0.15"/>
+      <circle cx="30" cy="45" r="5" fill="#c8902a" opacity="0.7"/>
+      <circle cx="60" cy="45" r="5" fill="#006666" opacity="0.7"/>
+      <circle cx="45" cy="30" r="4" fill="#006666" opacity="0.5"/>
+      <circle cx="45" cy="60" r="4" fill="#c8902a" opacity="0.5"/>
+      <path d="M32 35l13 10-13 10" stroke="#006666" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="50" y="38" width="12" height="14" rx="2" stroke="#c8902a" stroke-width="2" fill="rgba(200,144,42,0.08)"/>
+    </svg>
+  </div>
+
+  <div class="intro-badge" id="chBadge">Timeline Challenge</div>
+  <h1>Cipla <span>Journey</span></h1>
+  <p class="intro-sub" id="chSub">Explore Cipla's remarkable history — from a small lab in 1935 to a global pharmaceutical powerhouse. Drag each milestone to its correct year on the timeline.</p>
+
+  <div class="intro-instruction" id="chInstruction">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="16" r="1.5" fill="currentColor"/></svg>
+    Drag &amp; drop events to match each year
+  </div>
+
+  <button class="btn btn-primary" onclick="startGame()">
+    <span id="chStartBtn">Start Challenge</span>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- ================== GAME ================== -->
+<div class="screen game" id="gameScreen">
+  <div class="game-header">
+    <div class="game-title" id="chGameTitle">Cipla Journey</div>
+    <div class="score-display"><span id="chScoreLbl">Matched:</span> <span class="score-num" id="scoreNum">0</span> / 10</div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progFill"></div></div>
+
+  <!-- Mobile tap instruction — hidden on desktop -->
+  <div class="tap-banner" id="tapBanner" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 11.5V7a2 2 0 1 1 4 0v4.5M9 11.5a2 2 0 0 0-2 2v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-1a2 2 0 0 0-2-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <span id="chTapBanner">Tap a milestone card to select it, then tap the matching year</span>
+  </div>
+
+  <div class="game-area">
+    <!-- Timeline -->
+    <div class="timeline-col" id="timeline"></div>
+
+    <!-- Event cards tray -->
+    <div class="events-col" id="eventsTray">
+      <div class="tray-label" id="chTrayLabel">Milestones</div>
+    </div>
+  </div>
+
+  <div class="check-bar" id="checkBar" style="display:none;">
+    <button class="btn btn-gold" onclick="showComplete()">
+      <span id="chViewTimeline">View Full Timeline</span>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ================== COMPLETE ================== -->
+<div class="screen complete" id="completeScreen">
+  <div class="complete-trophy">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 20h40v24c0 11-9 20-20 20s-20-9-20-20V20z" stroke="#c8902a" stroke-width="3" fill="rgba(200,144,42,0.06)"/>
+      <path d="M30 30H18c0 12 5 18 12 20M70 30h12c0 12-5 18-12 20" stroke="#c8902a" stroke-width="2.5" fill="none"/>
+      <rect x="42" y="64" width="16" height="10" rx="2" stroke="#c8902a" stroke-width="2" fill="rgba(200,144,42,0.08)"/>
+      <rect x="36" y="74" width="28" height="8" rx="3" stroke="#c8902a" stroke-width="2" fill="none"/>
+      <path d="M47 38l3 3 6-7" stroke="#c8902a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <h1>Journey <span>Complete!</span></h1>
+  <p class="complete-sub" id="chCompSub">You've mapped Cipla's incredible legacy — from a rented bungalow in Bombay to a global force caring for millions worldwide.</p>
+
+  <div class="timeline-recap" id="recapTimeline"></div>
+
+  <button class="btn btn-primary" id="doneBtn" onclick="completeModule()"><span id="chCompleteBtn">
+    Complete Module</span>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <p class="complete-tagline" id="chTagline">"Caring for life, every step of the way."</p>
+</div>
+
+<!-- Toast -->
+<div class="feedback-toast" id="toast"></div>
+
+<script>
+/* ===== DATA ===== */
+const DATA_BASE = [
+  { year: '1935',      img: 'founding.jfif' },
+  { year: '1939–1945', img: 'WWII.jpg' },
+  { year: '1968',      img: '1 crore milestone.png' },
+  { year: '1972',      img: 'Leadership Transition.png' },
+  { year: '1984',      img: 'Name change.png' },
+  { year: '1995',      img: 'Defriprone.jfif' },
+  { year: '2001',      img: 'HIV.png' },
+  { year: '2013',      img: 'Medpro.png' },
+  { year: '2015',      img: 'US entry.jfif' },
+  { year: 'Present',   img: 'Present.jpg' },
+];
+
+const DATA_EVENTS = {
+  en: [
+    { event: 'Founding of Cipla',        detail: 'Dr. K.A. Hamied establishes The Chemical, Industrial & Pharmaceutical Laboratories in Mumbai.' },
+    { event: 'WWII Drug Supply',         detail: 'Cipla steps up to produce vital medicines during World War II, as imports are cut off.' },
+    { event: '₹1 Crore Milestone',       detail: 'Cipla\'s annual turnover crosses the ₹1 crore mark for the first time.' },
+    { event: 'Leadership Transition',    detail: 'Dr. YK Hamied takes the helm after his father\'s passing, driving Cipla\'s transformation into a global generics powerhouse.' },
+    { event: 'Name Change',              detail: 'The company is officially renamed from Chemical Industrial & Pharmaceutical Laboratories to Cipla Limited.' },
+    { event: 'Deferiprone Innovation',   detail: 'Cipla develops Deferiprone, an affordable oral iron chelation therapy, advancing care for thalassemia patients.' },
+    { event: '$1-a-Day HIV Drugs',       detail: 'Dr. Y.K. Hamied offers antiretroviral triple-therapy at $1/day, transforming global HIV treatment access.' },
+    { event: 'Cipla Medpro Acquisition', detail: 'Cipla acquires South African company Medpro, expanding its presence across the African continent.' },
+    { event: 'Entry into US Market',     detail: 'Cipla acquires InvaGen and Exelan Pharmaceuticals for $555 million, establishing a full commercial front-end in the US.' },
+    { event: 'Caring for Life',          detail: 'Today Cipla operates in 80+ countries with 1,500+ products — guided by one unwavering purpose: Caring for Life.' },
+  ],
+  es: [
+    { event: 'Fundación de Cipla',              detail: 'El Dr. K.A. Hamied establece The Chemical, Industrial & Pharmaceutical Laboratories en Bombay.' },
+    { event: 'Suministro de Medicamentos WWII', detail: 'Cipla responde produciendo medicamentos vitales durante la Segunda Guerra Mundial, cuando las importaciones fueron cortadas.' },
+    { event: 'Hito del ₹1 Crore',              detail: 'La facturación anual de Cipla supera el hito del ₹1 crore por primera vez.' },
+    { event: 'Transición de Liderazgo',         detail: 'El Dr. YK Hamied toma las riendas tras el fallecimiento de su padre, impulsando la transformación de Cipla en una potencia mundial de genéricos.' },
+    { event: 'Cambio de Nombre',                detail: 'La empresa es renombrada oficialmente de Chemical Industrial & Pharmaceutical Laboratories a Cipla Limited.' },
+    { event: 'Innovación Deferiprone',          detail: 'Cipla desarrolla Deferiprone, una terapia oral asequible de quelación de hierro, avanzando en el cuidado de pacientes con talasemia.' },
+    { event: 'Medicamentos VIH a $1/Día',       detail: 'El Dr. Y.K. Hamied ofrece triple terapia antirretroviral a $1/día, transformando el acceso global al tratamiento del VIH.' },
+    { event: 'Adquisición de Cipla Medpro',     detail: 'Cipla adquiere la empresa sudafricana Medpro, ampliando su presencia en todo el continente africano.' },
+    { event: 'Entrada al Mercado de EE.UU.',    detail: 'Cipla adquiere InvaGen y Exelan Pharmaceuticals por $555 millones, estableciendo una plataforma comercial completa en EE.UU.' },
+    { event: 'Cuidando la Vida',                detail: 'Hoy Cipla opera en más de 80 países con más de 1.500 productos, guiada por un propósito inquebrantable: Cuidar la Vida.' },
+  ],
+  pt: [
+    { event: 'Fundação da Cipla',                    detail: 'O Dr. K.A. Hamied estabelece The Chemical, Industrial & Pharmaceutical Laboratories em Bombaim.' },
+    { event: 'Fornecimento de Medicamentos na 2ª GM', detail: 'A Cipla intensifica a produção de medicamentos essenciais durante a Segunda Guerra Mundial, quando as importações foram interrompidas.' },
+    { event: 'Marco do ₹1 Crore',                    detail: 'O faturamento anual da Cipla ultrapassa a marca de ₹1 crore pela primeira vez.' },
+    { event: 'Transição de Liderança',               detail: 'O Dr. YK Hamied assume o comando após o falecimento de seu pai, impulsionando a transformação da Cipla em uma potência global de genéricos.' },
+    { event: 'Mudança de Nome',                      detail: 'A empresa é oficialmente renomeada de Chemical Industrial & Pharmaceutical Laboratories para Cipla Limited.' },
+    { event: 'Inovação Deferiprone',                 detail: 'A Cipla desenvolve o Deferiprone, uma terapia oral acessível de quelação de ferro, avançando no cuidado de pacientes com talassemia.' },
+    { event: 'Medicamentos HIV a $1/Dia',            detail: 'O Dr. Y.K. Hamied oferece terapia antirretroviral tripla a $1/dia, transformando o acesso global ao tratamento do HIV.' },
+    { event: 'Aquisição da Cipla Medpro',            detail: 'A Cipla adquire a empresa sul-africana Medpro, expandindo sua presença por todo o continente africano.' },
+    { event: 'Entrada no Mercado dos EUA',           detail: 'A Cipla adquire a InvaGen e a Exelan Pharmaceuticals por $555 milhões, estabelecendo uma plataforma comercial completa nos EUA.' },
+    { event: 'Cuidando da Vida',                     detail: 'Hoje a Cipla opera em mais de 80 países com mais de 1.500 produtos — guiada por um propósito inabalável: Cuidar da Vida.' },
+  ],
+  de: [
+    { event: 'Gründung von Cipla',             detail: 'Dr. K.A. Hamied gründet The Chemical, Industrial & Pharmaceutical Laboratories in Mumbai.' },
+    { event: 'Arzneimittelversorgung im 2. WK', detail: 'Cipla produziert lebenswichtige Medikamente während des Zweiten Weltkriegs, als Importe unterbrochen wurden.' },
+    { event: '₹1-Crore-Meilenstein',           detail: 'Der Jahresumsatz von Cipla überschreitet erstmals die ₹1-Crore-Marke.' },
+    { event: 'Führungswechsel',                 detail: 'Dr. YK Hamied übernimmt nach dem Tod seines Vaters das Steuer und treibt Ciplas Wandel zu einem globalen Generika-Kraftwerk voran.' },
+    { event: 'Namensänderung',                  detail: 'Das Unternehmen wird offiziell von Chemical Industrial & Pharmaceutical Laboratories in Cipla Limited umbenannt.' },
+    { event: 'Deferipron-Innovation',           detail: 'Cipla entwickelt Deferipron, eine erschwingliche orale Eisenchelationstherapie zur Verbesserung der Versorgung von Thalassämie-Patienten.' },
+    { event: 'HIV-Medikamente für $1/Tag',      detail: 'Dr. Y.K. Hamied bietet antiretrovirale Dreifachtherapie für $1/Tag an und verändert damit den globalen Zugang zur HIV-Behandlung.' },
+    { event: 'Cipla Medpro-Übernahme',          detail: 'Cipla übernimmt das südafrikanische Unternehmen Medpro und erweitert seine Präsenz auf dem afrikanischen Kontinent.' },
+    { event: 'Eintritt in den US-Markt',        detail: 'Cipla erwirbt InvaGen und Exelan Pharmaceuticals für $555 Millionen und etabliert damit eine vollständige Handelsplattform in den USA.' },
+    { event: 'Leben pflegen',                   detail: 'Heute ist Cipla in über 80 Ländern mit über 1.500 Produkten tätig — geleitet von einem unerschütterlichen Ziel: Leben zu pflegen.' },
+  ],
+};
+
+function getLocalizedData() {
+  const lang = getLang();
+  const events = DATA_EVENTS[lang] || DATA_EVENTS.en;
+  return DATA_BASE.map((d, i) => ({ ...d, ...events[i] }));
+}
+
+function eventImg(src, size) {
+  const s = size || 28;
+  return `<img src="${src}" alt="" style="width:${s}px;height:${s}px;object-fit:cover;border-radius:6px;display:block;" loading="lazy">`;
+}
+
+/* ===== STATE ===== */
+let matched = {};  // year -> eventIndex
+let score = 0;
+let dragData = null;
+let ghostEl = null;
+
+/* ===== INIT ===== */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* Detect touch device */
+const isTouchDevice = () => window.matchMedia('(max-width: 750px)').matches || navigator.maxTouchPoints > 0;
+
+let tapSelectedIdx = null; // for tap-to-place on mobile
+
+function startGame() {
+  showScreen('gameScreen');
+  buildTimeline();
+  buildCards();
+  updateScore();
+  // Show tap banner on mobile
+  if (isTouchDevice()) {
+    document.getElementById('tapBanner').style.display = 'flex';
+  }
+}
+
+function buildTimeline() {
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  getLocalizedData().forEach((d, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'timeline-slot';
+    slot.dataset.year = d.year;
+    slot.innerHTML = `
+      <div class="year-label">${d.year}</div>
+      <div class="drop-zone" data-year="${d.year}" data-index="${i}">
+        <span class="drop-placeholder">${t('chDropPlaceholder')}</span>
+      </div>`;
+    tl.appendChild(slot);
+
+    const dz = slot.querySelector('.drop-zone');
+    dz.addEventListener('dragover', onDragOver);
+    dz.addEventListener('dragleave', onDragLeave);
+    dz.addEventListener('drop', onDrop);
+    dz.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive:false});
+    // Tap-to-place: both click (desktop) and touchend (mobile)
+    dz.addEventListener('click', onDropZoneTap);
+    dz.addEventListener('touchend', function(e) {
+      if (tapSelectedIdx !== null && !this.classList.contains('has-card')) {
+        e.preventDefault();
+        onDropZoneTap.call(this);
+      }
+    }, {passive: false});
+  });
+}
+
+function buildCards() {
+  const tray = document.getElementById('eventsTray');
+  tray.innerHTML = `<div class="tray-label" id="chTrayLabel">${t('chTrayLabel')}</div>`;
+
+  const indices = getLocalizedData().map((_,i) => i);
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+
+  indices.forEach(idx => {
+    const d = getLocalizedData()[idx];
+    const card = document.createElement('div');
+    card.className = 'event-card';
+    card.draggable = true;
+    card.dataset.index = idx;
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.innerHTML = `
+      <div class="card-icon">${eventImg(d.img, 32)}</div>
+      <span>${d.event}</span>
+      <div class="grip"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="6" r="1.5" fill="currentColor"/><circle cx="15" cy="6" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="18" r="1.5" fill="currentColor"/><circle cx="15" cy="18" r="1.5" fill="currentColor"/></svg></div>`;
+
+    card.addEventListener('dragstart', onDragStart);
+    card.addEventListener('dragend', onDragEnd);
+    card.addEventListener('touchstart', onTouchStart, {passive: false});
+    card.addEventListener('touchmove', onTouchMove, {passive: false});
+    card.addEventListener('touchend', onTouchEnd, {passive: false});
+
+    tray.appendChild(card);
+  });
+}
+
+/* ===== TAP-TO-PLACE ===== */
+function onCardTap(cardEl) {
+  if (cardEl.classList.contains('placed')) return;
+  const idx = parseInt(cardEl.dataset.index);
+
+  if (tapSelectedIdx === idx) {
+    // Deselect
+    tapSelectedIdx = null;
+    cardEl.classList.remove('tap-selected');
+    clearTapReady();
+    return;
+  }
+  // Select
+  document.querySelectorAll('.event-card.tap-selected').forEach(c => c.classList.remove('tap-selected'));
+  tapSelectedIdx = idx;
+  cardEl.classList.add('tap-selected');
+  clearTapReady();
+  document.querySelectorAll('.drop-zone:not(.has-card)').forEach(dz => dz.classList.add('tap-ready'));
+}
+
+function onDropZoneTap() {
+  if (this.classList.contains('has-card')) return;
+  if (tapSelectedIdx === null) return;
+  clearTapReady();
+  document.querySelectorAll('.event-card.tap-selected').forEach(c => c.classList.remove('tap-selected'));
+  attemptMatch(tapSelectedIdx, this);
+  tapSelectedIdx = null;
+}
+
+function clearTapReady() {
+  document.querySelectorAll('.drop-zone.tap-ready').forEach(dz => dz.classList.remove('tap-ready'));
+}
+
+/* ===== DRAG: MOUSE ===== */
+function onDragStart(e) {
+  dragData = this.dataset.index;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', dragData);
+  setTimeout(() => this.style.opacity = '0.4', 0);
+}
+function onDragEnd(e) {
+  this.classList.remove('dragging');
+  this.style.opacity = '';
+  clearAllDragOver();
+}
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  if (!this.classList.contains('has-card')) this.classList.add('drag-over');
+}
+function onDragLeave(e) {
+  this.classList.remove('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over');
+  const idx = parseInt(e.dataTransfer.getData('text/plain'));
+  attemptMatch(idx, this);
+}
+
+/* ===== DRAG: TOUCH =====
+   Direction-aware touch logic:
+   - touchstart: record start, no preventDefault (allows horizontal tray scroll)
+   - touchmove: detect direction after TAP_THRESHOLD
+     → primarily vertical = drag (preventDefault to block scroll)
+     → primarily horizontal = scroll the tray (bail out, let browser handle)
+   - touchend: no movement = tap; vertical drag = drop
+*/
+const TAP_THRESHOLD = 8; // pixels
+let touchStartX = 0, touchStartY = 0, touchDragging = false, touchCancelled = false;
+
+function onTouchStart(e) {
+  if (this.classList.contains('placed')) return;
+  // No preventDefault here — lets horizontal tray scroll pass through
+  dragData = this.dataset.index;
+  touchDragging = false;
+  touchCancelled = false;
+  const t = e.touches[0];
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+  this.classList.add('dragging');
+}
+
+function onTouchMove(e) {
+  if (touchCancelled) return; // horizontal scroll in progress — don't interfere
+  const t = e.touches[0];
+  const dx = Math.abs(t.clientX - touchStartX);
+  const dy = Math.abs(t.clientY - touchStartY);
+
+  if (!touchDragging && (dx > TAP_THRESHOLD || dy > TAP_THRESHOLD)) {
+    if (dy >= dx) {
+      // Primarily vertical → enter drag mode
+      touchDragging = true;
+      clearTapReady();
+      document.querySelectorAll('.event-card.tap-selected').forEach(c => c.classList.remove('tap-selected'));
+      tapSelectedIdx = null;
+      createGhost(this, t.clientX, t.clientY);
+    } else {
+      // Primarily horizontal → let tray scroll, cancel drag state
+      touchCancelled = true;
+      this.classList.remove('dragging');
+      dragData = null;
+      return;
+    }
+  }
+
+  if (!touchDragging || !ghostEl) return;
+  e.preventDefault(); // block scroll only when actually dragging vertically
+  ghostEl.style.left = t.clientX + 'px';
+  ghostEl.style.top = t.clientY + 'px';
+  clearAllDragOver();
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el) {
+    const dz = el.closest('.drop-zone');
+    if (dz && !dz.classList.contains('has-card')) dz.classList.add('drag-over');
+  }
+}
+
+function onTouchEnd(e) {
+  document.querySelectorAll('.event-card.dragging').forEach(c => c.classList.remove('dragging'));
+
+  if (touchCancelled) {
+    // Was a horizontal scroll gesture — do nothing
+    touchCancelled = false;
+    return;
+  }
+
+  if (!touchDragging) {
+    // Was a tap — select/deselect the card
+    const cardEl = document.querySelector(`.event-card[data-index="${dragData}"]`);
+    if (cardEl) onCardTap(cardEl);
+    return;
+  }
+
+  // Was a vertical drag — attempt drop
+  if (!ghostEl) { clearAllDragOver(); return; }
+  const t = e.changedTouches[0];
+  removeGhost();
+  clearAllDragOver();
+  touchDragging = false;
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el) {
+    const dz = el.closest('.drop-zone');
+    if (dz) attemptMatch(parseInt(dragData), dz);
+  }
+}
+
+function createGhost(card, x, y) {
+  removeGhost();
+  ghostEl = document.createElement('div');
+  ghostEl.className = 'drag-ghost';
+  ghostEl.innerHTML = eventImg(getLocalizedData()[parseInt(dragData)].img, 24) + '<span>' + card.querySelector('span').textContent + '</span>';
+  ghostEl.style.left = x + 'px';
+  ghostEl.style.top = y + 'px';
+  document.body.appendChild(ghostEl);
+}
+function removeGhost() {
+  if (ghostEl) { ghostEl.remove(); ghostEl = null; }
+}
+function clearAllDragOver() {
+  document.querySelectorAll('.drop-zone.drag-over').forEach(d => d.classList.remove('drag-over'));
+}
+
+/* ===== MATCH LOGIC ===== */
+function attemptMatch(eventIdx, dropZone) {
+  const slotIdx = parseInt(dropZone.dataset.index);
+  if (dropZone.classList.contains('has-card')) return;
+
+  const isCorrect = (eventIdx === slotIdx);
+  const d = getLocalizedData()[eventIdx];
+
+  if (isCorrect) {
+    // Place card
+    dropZone.innerHTML = `<div class="placed-event"><div class="placed-icon">${eventImg(d.img, 24)}</div><span>${d.event}</span></div>`;
+    dropZone.classList.add('has-card', 'matched-correct');
+    dropZone.closest('.timeline-slot').classList.add('matched');
+
+    // Mark card as placed
+    const card = document.querySelector(`.event-card[data-index="${eventIdx}"]`);
+    if (card) card.classList.add('placed');
+
+    score++;
+    updateScore();
+    showToast(t('chCorrect') + ' ' + d.event, 'success');
+
+    if (score === DATA_BASE.length) {
+      setTimeout(() => {
+        document.getElementById('checkBar').style.display = 'flex';
+        burstConfetti(50);
+      }, 600);
+    }
+  } else {
+    dropZone.classList.add('matched-wrong');
+    setTimeout(() => dropZone.classList.remove('matched-wrong'), 600);
+    showToast(t('chWrong'), 'error');
+  }
+}
+
+function updateScore() {
+  document.getElementById('scoreNum').textContent = score;
+  const csl=document.getElementById('chScoreLbl'); if(csl) csl.textContent=t('chScoreLabel');
+  const sl=document.getElementById('chScoreLbl');if(sl)sl.textContent=t('chScoreLabel');
+  document.getElementById('progFill').style.width = (score / DATA_BASE.length * 100) + '%';
+}
+
+/* ===== TOAST ===== */
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  const icon = type === 'success'
+    ? '<svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>';
+  t.className = 'feedback-toast ' + type;
+  t.innerHTML = icon + msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ===== COMPLETE ===== */
+function showComplete() {
+  showScreen('completeScreen');
+  buildRecap();
+  burstConfetti(60);
+}
+
+function buildRecap() {
+  const wrap = document.getElementById('recapTimeline');
+  wrap.innerHTML = '';
+  getLocalizedData().forEach((d, i) => {
+    const item = document.createElement('div');
+    item.className = 'recap-item';
+    item.style.animationDelay = (i * 0.1) + 's';
+    item.innerHTML = `
+      <div class="recap-year">${d.year}</div>
+      <div class="recap-dot"><img src="${d.img}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+      <div class="recap-text">
+        <div class="recap-event">${d.event}</div>
+        <div class="recap-detail">${d.detail}</div>
+      </div>`;
+    wrap.appendChild(item);
+  });
+}
+
+function completeModule() {
+  window.parent.postMessage({
+    type: "MODULE_COMPLETED",
+    module: "module1"
+  }, "*");
+  const btn = document.getElementById('doneBtn');
+  btn.innerHTML = t('completedBtn');
+  btn.style.background = 'linear-gradient(135deg, #2a8c6a, #34b87e)';
+  btn.style.pointerEvents = 'none';
+}
+
+/* ===== CONFETTI ===== */
+function burstConfetti(n) {
+  const w = document.createElement('div');
+  w.className = 'confetti-wrap';
+  document.body.appendChild(w);
+  const colors = ['#006666','#c8902a','#e8b960','#2a8c6a','#fff','#d8d3ca'];
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-p';
+    p.style.left = Math.random()*100+'%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.width = (5+Math.random()*8)+'px';
+    p.style.height = (5+Math.random()*8)+'px';
+    p.style.borderRadius = Math.random()>0.5?'50%':'2px';
+    p.style.animationDuration = (1.6+Math.random()*1.4)+'s';
+    p.style.animationDelay = Math.random()*0.7+'s';
+    w.appendChild(p);
+  }
+  setTimeout(()=>w.remove(), 3800);
+}
+
+/* ===== LANG INIT ===== */
+/* ========== LANGUAGE PACK ========== */
+const TRANSLATIONS = {
+  en: {
+    navSub:"EMEU Onboarding Journey",welcome:"Welcome, New Joiner",heroH1:"Welcome to Cipla!",heroSub:"Your journey starts here.",heroBody:"Complete each step to explore, learn, and earn your way through the Cipla EMEU experience.",beginBtn:"Begin Journey",progressTitle:"Your Progress",progressText:(n,t)=>`${n} / ${t} Modules Completed`,startLabel:"START",finishLabel:"FINISH",certText:"Complete all modules to earn your",certStrong:"Certificate of Completion!",footerQuote:"Caring for life, every step of the way.",footerSub:"This is Cipla. This is your journey.",statusNotStarted:"Not Started",statusLocked:"Locked",statusCompleted:"Completed",backBtn:"Back to Journey",
+    m:[{title:"Cipla History",sub:"Discover our legacy of care and courage."},{title:"Cipla EVP & Purpose",sub:"Our purpose. Our promise. Our people."},{title:"EMEU Overview",sub:"Map the EMEU countries and our footprint."},{title:"EMEU Quiz",sub:"Test your knowledge of the EMEU region."},{title:"Pharma 101 Challenge",sub:"Match the pharma jargon like a pro."},{title:"Inside Cipla Ecosystem",sub:"Explore how Cipla works from the inside."},{title:"Final Game",sub:"The ultimate test. Are you ready?"},{title:"Feedback Survey",sub:"Your feedback helps us grow."}],
+    completeModuleBtn:"Complete Module",completedBtn:"✓ Module Completed!",caringTagline:'"Caring for life, every step of the way."',
+    chBadge:"Timeline Challenge",chH1a:"Cipla",chH1b:"Journey",chSub:"Explore Cipla's remarkable history — from a small lab in 1935 to a global pharmaceutical powerhouse. Drag each milestone to its correct year on the timeline.",chInstruction:"Drag & drop events to match each year",chStartBtn:"Start Challenge",chCompH1a:"Journey",chCompH1b:"Complete!",chCompSub:"You've mapped Cipla's incredible legacy — from a rented bungalow in Bombay to a global force caring for millions worldwide.",
+    chTrayLabel:"Milestones",chDropPlaceholder:"Drop here",chViewTimeline:"View Full Timeline",chScoreLabel:"Matched:",chTapBanner:"Tap a milestone card to select it, then tap the matching year",
+    ceBadge:"Hangman Challenge",ceH1a:"Unlock the",ceH1b:"Cipla Way",ceSub:"Find the values behind every decision at Cipla. Guess the hidden words, discover the OneCipla Credo, and unlock what drives us.",ceStartBtn:"Play & Learn",ceCompH1a:"You've",ceCompH1b:"Unlocked the Cipla Way!",ceCompSub:"These are the five pillars of the OneCipla Credo.",
+    eoBadge:"Map Challenge",eoH1a:"Welcome to",eoH1b:"Cipla!",eoSub:"Let's explore where Cipla touches lives around the world. Place countries on the map and discover our global footprint!",eoStep1:"<b>Drag</b> a country chip to its correct spot on the world map",eoStep2:"Complete <b>6 countries per round</b> to advance to the next level",eoStep3:"Unlock a <b>Cipla fact</b> for every country you place correctly!",eoStartBtn:"Start Challenge →",eoWinH:"Journey",eoWinEm:"Complete!",eoWinSub:"You've mapped Cipla's global footprint — from Europe to Latin America, you know where we care for life.",eoLoseH:"Time's",eoLoseEm:"Up!",eoLoseSub:"So close! Every try helps you learn Cipla's global reach.",
+    eqBadge:"Word Search Challenge",eqH1a:"EMEU",eqH1b:"Brand Quest",eqSub:"Cipla's key brands power healthcare across Europe, the Middle East, Asia, and Latin America. Can you find them all hidden in the grid?",eqStep1:"<strong>Tap</strong> a letter to start, then <strong>tap</strong> the last letter of the word",eqStep2:"Words run <strong>horizontally</strong> or <strong>vertically</strong> only",eqStep3:"Find all <strong>6 key brands</strong> to complete the challenge!",eqStartBtn:"Start Search",eqCompH1a:"All Brands",eqCompH1b:"Found!",eqCompSub:"You've discovered Cipla's key brands across the EMEU region — from respiratory leaders to rare disease innovators.",
+    phBadge:"Pharma 101 Challenge",phH1a:"Read the",phH1b:"Label",phSub:"Every medicine tells a story on its packaging. Study real Cipla product labels and identify the pharma terminology hidden in plain sight.",phStep1:"Study the <strong>medicine label</strong> shown on screen",phStep2:"Answer <strong>5 questions</strong> about what you see",phStep3:"Complete all <strong>3 rounds</strong> to master pharma labels",phStartBtn:"Start Challenge",phCompH1a:"Label",phCompH1b:"Expert!",phCompSub:"You can now read any pharma label with confidence — from API to Schedule, you know what every term means.",
+    ecBadge:"Ecosystem Challenge",ecH1a:"Inside the",ecH1b:"Cipla Machine",ecSub:"At Cipla, no department works alone. From a product idea to a patient's hands — it takes an entire ecosystem. Ready to see how it all connects?",ecG1:"Who Solves This?",ecG1sub:"Real scenarios. Pick which departments collaborate to solve them.",ecG2:"Who Am I?",ecG2sub:"Clues reveal one by one. Guess the department — fewer clues = more points.",ecStartBtn:"Let's Go",ecCompH1a:"Ecosystem",ecCompH1b:"Expert!",ecCompSub:"You understand how Cipla's departments connect — from portfolio strategy to the patient's hands. That's the Cipla machine.",
+    // shared game UI
+    scoreLabel:"Score:",roundLabel:(r,t)=>`Round ${r} of ${t}`,
+    // cipla-history
+    chCorrect:"Correct!",chWrong:"Not quite — try another year!",chRecapTitle:"Cipla",chRecapSub:"Journey",
+    // cipla-evp
+    ceClueNum:(n)=>`Clue ${n}`,ceRound:(r,t)=>`Round ${r} of ${t}`,
+    ceWinTitle:"Well Done!",ceLoseTitle:"Almost!",
+    ceFinalSub:"Together, these values make us a global pharmaceutical firm that consistently Cares for Life.",
+    // emeu-overview
+    eoRoundLabel:(r,t)=>`Round ${r} of ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} placed`,
+    eoStreakMsg:"🔥 Streak! +8s",eoDropOK:"✓ Correct!",eoDropFar:"Not quite — too far from the target!",eoDropClose:"Almost! A bit off target.",
+    eoFactTitle:"Cipla Fact",eoFactClose:"Continue",eoLoseSub2:"So close! Every try helps you learn Cipla's global reach.",
+    // emeu-quiz
+    eqCorrectPrefix:"Correct!",eqWrongMsg:"Not quite — try another year!",
+    // pharma101
+    phCorrectPrefix:"✓ Correct!",phWrongPrefix:"✗ Not quite.",phScoreLbl:"Score:",
+    phRecapTitle:"What You Learned",
+    // cipla-ecosystem
+    ecScenarioLabel:(n,t)=>`Scenario ${n} of ${t}`,ecRiddleLabel:(n,t)=>`Riddle ${n} of ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} of ${t} departments identified (+${p} pts)`,
+    ecHintLabel:"Think:",ecNextScenario:"Next Scenario →",ecNextRiddle:"Next Riddle →",
+    ecGame1Label:"Game 1 of 2",ecGame2Label:"Game 2 of 2",
+    ecTransSub:"Now let's flip it. Can you identify a department from just 3 clues?",
+  },
+  es: {
+    navSub:"Viaje de Incorporación EMEU",welcome:"Bienvenido, Nuevo Integrante",heroH1:"¡Bienvenido a Cipla!",heroSub:"Tu viaje comienza aquí.",heroBody:"Completa cada paso para explorar, aprender y avanzar en tu experiencia EMEU con Cipla.",beginBtn:"Comenzar Viaje",progressTitle:"Tu Progreso",progressText:(n,t)=>`${n} / ${t} Módulos Completados`,startLabel:"INICIO",finishLabel:"FINAL",certText:"Completa todos los módulos para obtener tu",certStrong:"¡Certificado de Finalización!",footerQuote:"Cuidando la vida, a cada paso del camino.",footerSub:"Esto es Cipla. Este es tu viaje.",statusNotStarted:"No iniciado",statusLocked:"Bloqueado",statusCompleted:"Completado",backBtn:"Volver al Viaje",
+
+    chTapBanner:"Toca una tarjeta de hito para seleccionarla, luego toca el año correspondiente",
+    // cipla-history extra
+    chTrayLabel:"Hitos",chDropPlaceholder:"Soltar aquí",chViewTimeline:"Ver Cronología Completa",chScoreLabel:"Emparejados:",
+    // cipla-evp extra
+    ceShowClue:"Mostrar Pista",ceWellDone:"¡Bien Hecho!",ceAlmost:"¡Casi!",ceNext:"Siguiente",ceTryAgain:"Intentar de Nuevo",ceSeeResults:"Ver Resultados",ceLives:"Vidas:",
+    // emeu-overview extra
+    eoRound1Sub:"¡Buen trabajo! Encontraste los 6 países. ¿Listo para la Ronda 2?",eoRound2Sub:"¡Increíble! 12 listos — ¡solo 4 más!",eoContinue:"Continuar",eoTryAgain:"Intentar de Nuevo",eoPlayAgain:"Jugar de Nuevo",eoPlacedLabel:"Colocados:",
+    // emeu-quiz extra
+    eqBrandsPanel:"Marcas Clave",eqFoundLabel:"Encontrados:",eqHintBtn:"Dame una pista",
+    // pharma101 extra
+    phRoundLabel:(r,t)=>`Ronda ${r} de ${t}`,phQLabel:(q,t)=>`Pregunta ${q} de ${t}`,phNextQ:"Siguiente Pregunta →",phNextLabel:"Siguiente Etiqueta →",phSeeResults:"Ver Resultados →",phFinalScore:"Total:",
+    // cipla-ecosystem extra
+    ecLockIn:"Confirmar Respuesta",ecRevealClue:(n)=>`Revelar Pista ${n} (-50 pts)`,ecAllClues:"Todas las pistas reveladas",ecScoreLabel:"Puntuación:",ecTotalLabel:"Total:",ecPart1Score:(s)=>`Puntuación Parte 1: ${s} pts`,ecPart1Done:"¡Parte 1 Completa!",ecPart1Sub:"Ahora al revés. En lugar de emparejar departamentos con escenarios, ¿puedes identificar un departamento con solo 3 pistas?",ecPlayG2:"Jugar \"¿Quién Soy?\"",
+    m:[{title:"Historia de Cipla",sub:"Descubre nuestro legado de cuidado y valentía."},{title:"EVP y Propósito de Cipla",sub:"Nuestro propósito. Nuestra promesa. Nuestra gente."},{title:"Descripción General EMEU",sub:"Mapea los países EMEU y nuestra huella global."},{title:"Quiz EMEU",sub:"Pon a prueba tu conocimiento de la región EMEU."},{title:"Desafío Pharma 101",sub:"Empareja el vocabulario farmacéutico como un pro."},{title:"Ecosistema Interno Cipla",sub:"Explora cómo funciona Cipla desde adentro."},{title:"Juego Final",sub:"La prueba definitiva. ¿Estás listo?"},{title:"Encuesta de Feedback",sub:"Tu opinión nos ayuda a crecer."}],
+    completeModuleBtn:"Completar Módulo",completedBtn:"✓ ¡Módulo Completado!",caringTagline:'"Cuidando la vida, a cada paso del camino."',
+    chBadge:"Desafío de Cronología",chH1a:"Cipla",chH1b:"Viaje",chSub:"Explora la notable historia de Cipla — desde un pequeño laboratorio en 1935 hasta una empresa farmacéutica global. Arrastra cada hito al año correcto.",chInstruction:"Arrastra y suelta eventos para emparejar cada año",chStartBtn:"Comenzar Desafío",chCompH1a:"¡Viaje",chCompH1b:"Completo!",chCompSub:"Has mapeado el increíble legado de Cipla — desde un bungalow en Bombay hasta una fuerza global.",
+    ceBadge:"Desafío Ahorcado",ceH1a:"Desbloquea el",ceH1b:"Camino Cipla",ceSub:"Encuentra los valores detrás de cada decisión en Cipla. Adivina las palabras ocultas y descubre el Credo OneCipla.",ceStartBtn:"Jugar y Aprender",ceCompH1a:"¡Has",ceCompH1b:"Desbloqueado el Camino Cipla!",ceCompSub:"Estos son los cinco pilares del Credo OneCipla.",
+    eoBadge:"Desafío de Mapa",eoH1a:"¡Bienvenido a",eoH1b:"Cipla!",eoSub:"Exploremos dónde Cipla toca vidas en todo el mundo. ¡Coloca los países en el mapa!",eoStep1:"<b>Arrastra</b> un chip de país a su lugar correcto en el mapa",eoStep2:"Completa <b>6 países por ronda</b> para avanzar al siguiente nivel",eoStep3:"¡Desbloquea un <b>dato de Cipla</b> por cada país que coloques correctamente!",eoStartBtn:"Comenzar Desafío →",eoWinH:"¡Viaje",eoWinEm:"Completo!",eoWinSub:"Has mapeado la huella global de Cipla — desde Europa hasta Latinoamérica.",eoLoseH:"¡Se acabó",eoLoseEm:"el tiempo!",eoLoseSub:"¡Casi! Cada intento te ayuda a aprender la presencia global de Cipla.",
+    eqBadge:"Sopa de Letras",eqH1a:"EMEU",eqH1b:"Búsqueda de Marcas",eqSub:"Las marcas clave de Cipla impulsan la salud en Europa, Oriente Medio, Asia y Latinoamérica. ¿Puedes encontrarlas todas?",eqStep1:"<strong>Toca</strong> una letra para comenzar, luego <strong>toca</strong> la última letra",eqStep2:"Las palabras van <strong>horizontal</strong> o <strong>verticalmente</strong>",eqStep3:"¡Encuentra las <strong>6 marcas clave</strong> para completar el desafío!",eqStartBtn:"Comenzar Búsqueda",eqCompH1a:"¡Todas las Marcas",eqCompH1b:"Encontradas!",eqCompSub:"Has descubierto las marcas clave de Cipla en la región EMEU.",
+    phBadge:"Desafío Pharma 101",phH1a:"Lee la",phH1b:"Etiqueta",phSub:"Cada medicamento cuenta una historia en su empaque. Estudia etiquetas reales de Cipla e identifica la terminología farmacéutica.",phStep1:"Estudia la <strong>etiqueta del medicamento</strong> mostrada en pantalla",phStep2:"Responde <strong>5 preguntas</strong> sobre lo que ves",phStep3:"Completa las <strong>3 rondas</strong> para dominar las etiquetas farmacéuticas",phStartBtn:"Comenzar Desafío",phCompH1a:"¡Experto en",phCompH1b:"Etiquetas!",phCompSub:"Ahora puedes leer cualquier etiqueta farmacéutica con confianza.",
+    ecBadge:"Desafío Ecosistema",ecH1a:"Dentro de la",ecH1b:"Máquina Cipla",ecSub:"En Cipla, ningún departamento trabaja solo. De una idea de producto a las manos del paciente — se necesita todo un ecosistema.",ecG1:"¿Quién lo Resuelve?",ecG1sub:"Escenarios reales. Elige qué departamentos colaboran.",ecG2:"¿Quién Soy?",ecG2sub:"Las pistas se revelan una a una. Adivina el departamento.",ecStartBtn:"¡Vamos!",ecCompH1a:"¡Experto en",ecCompH1b:"Ecosistema!",ecCompSub:"Entiendes cómo se conectan los departamentos de Cipla.",
+    scoreLabel:"Puntuación:",roundLabel:(r,t)=>`Ronda ${r} de ${t}`,
+    chCorrect:"¡Correcto!",chWrong:"No exactamente — intenta otro año.",chRecapTitle:"Cipla",chRecapSub:"Viaje",
+    ceClueNum:(n)=>`Pista ${n}`,ceRound:(r,t)=>`Ronda ${r} de ${t}`,
+    ceWinTitle:"¡Bien Hecho!",ceLoseTitle:"¡Casi!",
+    ceFinalSub:"Juntos, estos valores nos convierten en una empresa farmacéutica global que cuida la vida de manera constante.",
+    eoRoundLabel:(r,t)=>`Ronda ${r} de ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} colocados`,
+    eoStreakMsg:"🔥 ¡Racha! +8s",eoDropOK:"✓ ¡Correcto!",eoDropFar:"¡No exactamente — demasiado lejos!",eoDropClose:"¡Casi! Un poco fuera de lugar.",
+    eoFactTitle:"Dato de Cipla",eoFactClose:"Continuar",eoLoseSub2:"¡Casi! Cada intento te ayuda a aprender la presencia global de Cipla.",
+    eqCorrectPrefix:"¡Correcto!",eqWrongMsg:"No exactamente — sigue intentando.",
+    phCorrectPrefix:"✓ ¡Correcto!",phWrongPrefix:"✗ No exactamente.",phScoreLbl:"Puntuación:",
+    phRecapTitle:"Lo Que Aprendiste",
+    ecScenarioLabel:(n,t)=>`Escenario ${n} de ${t}`,ecRiddleLabel:(n,t)=>`Adivinanza ${n} de ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} de ${t} departamentos identificados (+${p} pts)`,
+    ecHintLabel:"Pista:",ecNextScenario:"Siguiente Escenario →",ecNextRiddle:"Siguiente Adivinanza →",
+    ecGame1Label:"Juego 1 de 2",ecGame2Label:"Juego 2 de 2",
+    ecTransSub:"Ahora al revés. ¿Puedes identificar un departamento con solo 3 pistas?",
+  },
+  pt: {
+    navSub:"Jornada de Integração EMEU",welcome:"Bem-vindo, Novo Colaborador",heroH1:"Bem-vindo à Cipla!",heroSub:"A sua jornada começa aqui.",heroBody:"Complete cada etapa para explorar, aprender e avançar na sua experiência EMEU com a Cipla.",beginBtn:"Iniciar Jornada",progressTitle:"Seu Progresso",progressText:(n,t)=>`${n} / ${t} Módulos Concluídos`,startLabel:"INÍCIO",finishLabel:"FINAL",certText:"Conclua todos os módulos para obter seu",certStrong:"Certificado de Conclusão!",footerQuote:"Cuidando da vida, a cada passo do caminho.",footerSub:"Isso é a Cipla. Esta é a sua jornada.",statusNotStarted:"Não iniciado",statusLocked:"Bloqueado",statusCompleted:"Concluído",backBtn:"Voltar à Jornada",
+
+    chTapBanner:"Toque em um marco para selecioná-lo, depois toque no ano correspondente",
+    // cipla-history extra
+    chTrayLabel:"Marcos",chDropPlaceholder:"Soltar aqui",chViewTimeline:"Ver Linha do Tempo Completa",chScoreLabel:"Combinados:",
+    // cipla-evp extra
+    ceShowClue:"Mostrar Pista",ceWellDone:"Muito Bem!",ceAlmost:"Quase!",ceNext:"Próximo",ceTryAgain:"Tentar Novamente",ceSeeResults:"Ver Resultados",ceLives:"Vidas:",
+    // emeu-overview extra
+    eoRound1Sub:"Ótimo trabalho! Você encontrou os 6 países. Pronto para a Rodada 2?",eoRound2Sub:"Incrível! 12 feitos — só 4 mais!",eoContinue:"Continuar",eoTryAgain:"Tentar Novamente",eoPlayAgain:"Jogar Novamente",eoPlacedLabel:"Colocados:",
+    // emeu-quiz extra
+    eqBrandsPanel:"Marcas Principais",eqFoundLabel:"Encontrados:",eqHintBtn:"Me dê uma dica",
+    // pharma101 extra
+    phRoundLabel:(r,t)=>`Rodada ${r} de ${t}`,phQLabel:(q,t)=>`Pergunta ${q} de ${t}`,phNextQ:"Próxima Pergunta →",phNextLabel:"Próximo Rótulo →",phSeeResults:"Ver Resultados →",phFinalScore:"Total:",
+    // cipla-ecosystem extra
+    ecLockIn:"Confirmar Resposta",ecRevealClue:(n)=>`Revelar Pista ${n} (-50 pts)`,ecAllClues:"Todas as pistas reveladas",ecScoreLabel:"Pontuação:",ecTotalLabel:"Total:",ecPart1Score:(s)=>`Pontuação Parte 1: ${s} pts`,ecPart1Done:"Parte 1 Concluída!",ecPart1Sub:"Agora ao contrário. Em vez de combinar departamentos com cenários — você consegue identificar um departamento com apenas 3 pistas?",ecPlayG2:"Jogar \"Quem Sou Eu?\"",
+    m:[{title:"História da Cipla",sub:"Descubra nosso legado de cuidado e coragem."},{title:"EVP e Propósito da Cipla",sub:"Nosso propósito. Nossa promessa. Nossa gente."},{title:"Visão Geral EMEU",sub:"Mapeie os países EMEU e nossa presença global."},{title:"Quiz EMEU",sub:"Teste seu conhecimento sobre a região EMEU."},{title:"Desafio Pharma 101",sub:"Conecte o jargão farmacêutico como um profissional."},{title:"Ecossistema Interno da Cipla",sub:"Explore como a Cipla funciona por dentro."},{title:"Jogo Final",sub:"O teste definitivo. Você está pronto?"},{title:"Pesquisa de Feedback",sub:"Sua opinião nos ajuda a crescer."}],
+    completeModuleBtn:"Concluir Módulo",completedBtn:"✓ Módulo Concluído!",caringTagline:'"Cuidando da vida, a cada passo do caminho."',
+    chBadge:"Desafio da Linha do Tempo",chH1a:"Cipla",chH1b:"Jornada",chSub:"Explore a notável história da Cipla — de um pequeno laboratório em 1935 a uma potência farmacêutica global. Arraste cada marco para o ano correto.",chInstruction:"Arraste e solte eventos para combinar com cada ano",chStartBtn:"Iniciar Desafio",chCompH1a:"Jornada",chCompH1b:"Concluída!",chCompSub:"Você mapeou o incrível legado da Cipla — de um bangalô em Bombaim a uma força global que cuida de milhões.",
+    ceBadge:"Desafio da Forca",ceH1a:"Descubra o",ceH1b:"Caminho Cipla",ceSub:"Encontre os valores por trás de cada decisão na Cipla. Adivinhe as palavras ocultas e descubra o Credo OneCipla.",ceStartBtn:"Jogar e Aprender",ceCompH1a:"Você",ceCompH1b:"Descobriu o Caminho Cipla!",ceCompSub:"Estes são os cinco pilares do Credo OneCipla.",
+    eoBadge:"Desafio do Mapa",eoH1a:"Bem-vindo à",eoH1b:"Cipla!",eoSub:"Vamos explorar onde a Cipla toca vidas ao redor do mundo. Coloque os países no mapa!",eoStep1:"<b>Arraste</b> um chip de país para o local correto no mapa",eoStep2:"Complete <b>6 países por rodada</b> para avançar ao próximo nível",eoStep3:"Desbloqueie um <b>fato da Cipla</b> para cada país colocado corretamente!",eoStartBtn:"Iniciar Desafio →",eoWinH:"Jornada",eoWinEm:"Concluída!",eoWinSub:"Você mapeou a presença global da Cipla — da Europa à América Latina.",eoLoseH:"Tempo",eoLoseEm:"Esgotado!",eoLoseSub:"Tão perto! Cada tentativa ajuda você a aprender a presença global da Cipla.",
+    eqBadge:"Caça-Palavras",eqH1a:"EMEU",eqH1b:"Busca de Marcas",eqSub:"As principais marcas da Cipla impulsionam a saúde na Europa, Oriente Médio, Ásia e América Latina. Você consegue encontrá-las todas?",eqStep1:"<strong>Toque</strong> uma letra para começar, depois <strong>toque</strong> a última letra",eqStep2:"As palavras vão <strong>horizontal</strong> ou <strong>verticalmente</strong>",eqStep3:"Encontre as <strong>6 marcas principais</strong> para concluir o desafio!",eqStartBtn:"Iniciar Busca",eqCompH1a:"Todas as Marcas",eqCompH1b:"Encontradas!",eqCompSub:"Você descobriu as principais marcas da Cipla na região EMEU.",
+    phBadge:"Desafio Pharma 101",phH1a:"Leia o",phH1b:"Rótulo",phSub:"Cada medicamento conta uma história em sua embalagem. Estude rótulos reais da Cipla e identifique a terminologia farmacêutica.",phStep1:"Estude o <strong>rótulo do medicamento</strong> mostrado na tela",phStep2:"Responda <strong>5 perguntas</strong> sobre o que você vê",phStep3:"Conclua todas as <strong>3 rodadas</strong> para dominar os rótulos farmacêuticos",phStartBtn:"Iniciar Desafio",phCompH1a:"Especialista em",phCompH1b:"Rótulos!",phCompSub:"Agora você pode ler qualquer rótulo farmacêutico com confiança.",
+    ecBadge:"Desafio do Ecossistema",ecH1a:"Dentro da",ecH1b:"Máquina Cipla",ecSub:"Na Cipla, nenhum departamento trabalha sozinho. De uma ideia de produto às mãos do paciente — é necessário todo um ecossistema.",ecG1:"Quem Resolve?",ecG1sub:"Cenários reais. Escolha quais departamentos colaboram.",ecG2:"Quem Sou Eu?",ecG2sub:"As pistas são reveladas uma a uma. Adivinhe o departamento.",ecStartBtn:"Vamos Lá!",ecCompH1a:"Especialista em",ecCompH1b:"Ecossistema!",ecCompSub:"Você entende como os departamentos da Cipla se conectam.",
+    scoreLabel:"Pontuação:",roundLabel:(r,t)=>`Rodada ${r} de ${t}`,
+    chCorrect:"Correto!",chWrong:"Não exatamente — tente outro ano.",chRecapTitle:"Cipla",chRecapSub:"Jornada",
+    ceClueNum:(n)=>`Dica ${n}`,ceRound:(r,t)=>`Rodada ${r} de ${t}`,
+    ceWinTitle:"Muito Bem!",ceLoseTitle:"Quase!",
+    ceFinalSub:"Juntos, esses valores nos tornam uma empresa farmacêutica global que cuida da vida de forma consistente.",
+    eoRoundLabel:(r,t)=>`Rodada ${r} de ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} colocados`,
+    eoStreakMsg:"🔥 Sequência! +8s",eoDropOK:"✓ Correto!",eoDropFar:"Não exatamente — muito longe do alvo!",eoDropClose:"Quase! Um pouco fora do alvo.",
+    eoFactTitle:"Fato da Cipla",eoFactClose:"Continuar",eoLoseSub2:"Tão perto! Cada tentativa ajuda você a aprender a presença global da Cipla.",
+    eqCorrectPrefix:"Correto!",eqWrongMsg:"Não exatamente — continue tentando.",
+    phCorrectPrefix:"✓ Correto!",phWrongPrefix:"✗ Não exatamente.",phScoreLbl:"Pontuação:",
+    phRecapTitle:"O Que Você Aprendeu",
+    ecScenarioLabel:(n,t)=>`Cenário ${n} de ${t}`,ecRiddleLabel:(n,t)=>`Charada ${n} de ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} de ${t} departamentos identificados (+${p} pts)`,
+    ecHintLabel:"Dica:",ecNextScenario:"Próximo Cenário →",ecNextRiddle:"Próxima Charada →",
+    ecGame1Label:"Jogo 1 de 2",ecGame2Label:"Jogo 2 de 2",
+    ecTransSub:"Agora ao contrário. Você consegue identificar um departamento com apenas 3 dicas?",
+  },
+  de: {
+    navSub:"EMEU Onboarding-Reise",welcome:"Willkommen, Neuer Mitarbeiter",heroH1:"Willkommen bei Cipla!",heroSub:"Ihre Reise beginnt hier.",heroBody:"Schließen Sie jeden Schritt ab, um die Cipla EMEU-Erfahrung zu erkunden und voranzukommen.",beginBtn:"Reise beginnen",progressTitle:"Ihr Fortschritt",progressText:(n,t)=>`${n} / ${t} Module abgeschlossen`,startLabel:"START",finishLabel:"ZIEL",certText:"Schließen Sie alle Module ab, um Ihr",certStrong:"Abschlusszertifikat zu erhalten!",footerQuote:"Das Leben pflegen, Schritt für Schritt.",footerSub:"Das ist Cipla. Das ist Ihre Reise.",statusNotStarted:"Nicht gestartet",statusLocked:"Gesperrt",statusCompleted:"Abgeschlossen",backBtn:"Zurück zur Reise",
+    chTrayLabel:"Meilensteine",chDropPlaceholder:"Hier ablegen",chViewTimeline:"Vollständige Zeitleiste anzeigen",chScoreLabel:"Zugeordnet:",chTapBanner:"Tippe auf eine Meilenstein-Karte zum Auswählen, dann auf das passende Jahr",
+    ceShowClue:"Hinweis anzeigen",ceWellDone:"Gut gemacht!",ceAlmost:"Fast!",ceNext:"Weiter",ceTryAgain:"Nochmal versuchen",ceSeeResults:"Ergebnisse anzeigen",ceLives:"Leben:",
+    eoRound1Sub:"Gut gemacht! Sie haben alle 6 Länder gefunden. Bereit für Runde 2?",eoRound2Sub:"Fantastisch! 12 geschafft — noch 4 übrig!",eoContinue:"Weiter",eoTryAgain:"Nochmal versuchen",eoPlayAgain:"Nochmal spielen",eoPlacedLabel:"Platziert:",
+    eqBrandsPanel:"Schlüsselmarken",eqFoundLabel:"Gefunden:",eqHintBtn:"Gib mir einen Hinweis",
+    phRoundLabel:(r,t)=>`Runde ${r} von ${t}`,phQLabel:(q,t)=>`Frage ${q} von ${t}`,phNextQ:"Nächste Frage →",phNextLabel:"Nächstes Etikett →",phSeeResults:"Ergebnisse anzeigen →",phFinalScore:"Gesamt:",
+    ecLockIn:"Antwort bestätigen",ecRevealClue:(n)=>`Hinweis ${n} enthüllen (-50 Pkt)`,ecAllClues:"Alle Hinweise enthüllt",ecScoreLabel:"Punkte:",ecTotalLabel:"Gesamt:",ecPart1Score:(s)=>`Teil 1 Punkte: ${s} Pkt`,ecPart1Done:"Teil 1 Abgeschlossen!",ecPart1Sub:"Jetzt andersherum. Können Sie eine Abteilung aus nur 3 Hinweisen erkennen?",ecPlayG2:"Spielen \"Wer bin ich?\"",
+    m:[{title:"Cipla Geschichte",sub:"Entdecken Sie unser Erbe der Fürsorge und des Mutes."},{title:"Cipla EVP & Zweck",sub:"Unser Zweck. Unser Versprechen. Unsere Menschen."},{title:"EMEU Überblick",sub:"Kartieren Sie die EMEU-Länder und unseren Fußabdruck."},{title:"EMEU Quiz",sub:"Testen Sie Ihr Wissen über die EMEU-Region."},{title:"Pharma 101 Challenge",sub:"Ordnen Sie den Pharma-Fachjargon wie ein Profi zu."},{title:"Cipla Ökosystem",sub:"Erkunden Sie, wie Cipla von innen funktioniert."},{title:"Abschlussspiel",sub:"Der ultimative Test. Sind Sie bereit?"},{title:"Feedback-Umfrage",sub:"Ihr Feedback hilft uns zu wachsen."}],
+    completeModuleBtn:"Modul abschließen",completedBtn:"✓ Modul abgeschlossen!",caringTagline:'"Das Leben pflegen, Schritt für Schritt."',
+    chBadge:"Zeitleisten-Challenge",chH1a:"Cipla",chH1b:"Reise",chSub:"Erkunden Sie Ciplas bemerkenswerte Geschichte — von einem kleinen Labor 1935 bis zu einem globalen Pharmaunternehmen. Ziehen Sie jeden Meilenstein in das richtige Jahr.",chInstruction:"Ereignisse per Drag & Drop dem richtigen Jahr zuordnen",chStartBtn:"Challenge starten",chCompH1a:"Reise",chCompH1b:"Abgeschlossen!",chCompSub:"Sie haben Ciplas unglaubliches Erbe kartiert — von einem Bungalow in Bombay bis zu einer globalen Kraft.",
+    ceBadge:"Galgenmännchen Challenge",ceH1a:"Entdecken Sie den",ceH1b:"Cipla-Weg",ceSub:"Finden Sie die Werte hinter jeder Entscheidung bei Cipla. Erraten Sie die versteckten Wörter und entdecken Sie das OneCipla Credo.",ceStartBtn:"Spielen & Lernen",ceCompH1a:"Sie haben den",ceCompH1b:"Cipla-Weg entdeckt!",ceCompSub:"Dies sind die fünf Säulen des OneCipla Credos.",
+    eoBadge:"Karten-Challenge",eoH1a:"Willkommen bei",eoH1b:"Cipla!",eoSub:"Erkunden wir, wo Cipla weltweit Leben berührt. Platzieren Sie Länder auf der Karte und entdecken Sie unseren globalen Fußabdruck!",eoStep1:"<b>Ziehen</b> Sie einen Länder-Chip an die richtige Stelle auf der Weltkarte",eoStep2:"Schließen Sie <b>6 Länder pro Runde</b> ab, um zur nächsten Stufe zu gelangen",eoStep3:"Schalten Sie für jedes richtig platzierte Land ein <b>Cipla-Faktum</b> frei!",eoStartBtn:"Challenge starten →",eoWinH:"Reise",eoWinEm:"Abgeschlossen!",eoWinSub:"Sie haben Ciplas globalen Fußabdruck kartiert — von Europa bis Lateinamerika.",eoLoseH:"Zeit",eoLoseEm:"Abgelaufen!",eoLoseSub:"Fast! Jeder Versuch hilft Ihnen, Ciplas globale Präsenz kennenzulernen.",
+    eqBadge:"Wortsuche-Challenge",eqH1a:"EMEU",eqH1b:"Markensuche",eqSub:"Ciplas Schlüsselmarken treiben die Gesundheitsversorgung in Europa, dem Nahen Osten, Asien und Lateinamerika an. Können Sie sie alle finden?",eqStep1:"<strong>Tippen</strong> Sie einen Buchstaben zum Starten, dann den letzten Buchstaben des Wortes",eqStep2:"Wörter verlaufen nur <strong>horizontal</strong> oder <strong>vertikal</strong>",eqStep3:"Finden Sie alle <strong>6 Schlüsselmarken</strong>, um die Challenge abzuschließen!",eqStartBtn:"Suche starten",eqCompH1a:"Alle Marken",eqCompH1b:"Gefunden!",eqCompSub:"Sie haben Ciplas Schlüsselmarken in der EMEU-Region entdeckt.",
+    phBadge:"Pharma 101 Challenge",phH1a:"Lesen Sie das",phH1b:"Etikett",phSub:"Jedes Medikament erzählt eine Geschichte auf seiner Verpackung. Studieren Sie echte Cipla-Etiketten und identifizieren Sie die Pharmaterminologie.",phStep1:"Studieren Sie das <strong>Arzneimitteletikett</strong> auf dem Bildschirm",phStep2:"Beantworten Sie <strong>5 Fragen</strong> zu dem, was Sie sehen",phStep3:"Schließen Sie alle <strong>3 Runden</strong> ab, um Pharmeetiketten zu meistern",phStartBtn:"Challenge starten",phCompH1a:"Etiketten-",phCompH1b:"Experte!",phCompSub:"Sie können jetzt jedes Pharmaetikett sicher lesen.",
+    ecBadge:"Ökosystem-Challenge",ecH1a:"Innerhalb der",ecH1b:"Cipla-Maschine",ecSub:"Bei Cipla arbeitet keine Abteilung allein. Von einer Produktidee bis in die Hände des Patienten — es braucht ein ganzes Ökosystem.",ecG1:"Wer löst das?",ecG1sub:"Echte Szenarien. Wählen Sie die Abteilungen, die zusammenarbeiten.",ecG2:"Wer bin ich?",ecG2sub:"Hinweise werden nacheinander enthüllt. Erraten Sie die Abteilung.",ecStartBtn:"Los geht's!",ecCompH1a:"Ökosystem-",ecCompH1b:"Experte!",ecCompSub:"Sie verstehen, wie Ciplas Abteilungen miteinander verbunden sind.",
+    scoreLabel:"Punkte:",roundLabel:(r,t)=>`Runde ${r} von ${t}`,
+    chCorrect:"Richtig!",chWrong:"Nicht ganz — versuche ein anderes Jahr.",chRecapTitle:"Cipla",chRecapSub:"Reise",
+    ceClueNum:(n)=>`Hinweis ${n}`,ceRound:(r,t)=>`Runde ${r} von ${t}`,
+    ceWinTitle:"Gut gemacht!",ceLoseTitle:"Fast!",
+    ceFinalSub:"Zusammen machen uns diese Werte zu einem globalen Pharmaunternehmen, das konsequent für das Leben sorgt.",
+    eoRoundLabel:(r,t)=>`Runde ${r} von ${t}`,eoScoreLabel:(n,t)=>`${n} / ${t} platziert`,
+    eoStreakMsg:"🔥 Serie! +8s",eoDropOK:"✓ Richtig!",eoDropFar:"Nicht ganz — zu weit vom Ziel entfernt!",eoDropClose:"Fast! Etwas daneben.",
+    eoFactTitle:"Cipla-Fakt",eoFactClose:"Weiter",eoLoseSub2:"Fast! Jeder Versuch hilft Ihnen, Ciplas globale Präsenz kennenzulernen.",
+    eqCorrectPrefix:"Richtig!",eqWrongMsg:"Nicht ganz — versuche es weiter.",
+    phCorrectPrefix:"✓ Richtig!",phWrongPrefix:"✗ Nicht ganz.",phScoreLbl:"Punkte:",
+    phRecapTitle:"Was Sie Gelernt Haben",
+    ecScenarioLabel:(r,t)=>`Szenario ${r} von ${t}`,ecRiddleLabel:(r,t)=>`Rätsel ${r} von ${t}`,
+    ecScoreOf:(n,t,p)=>`✓ ${n} von ${t} Abteilungen erkannt (+${p} Pkt)`,
+    ecHintLabel:"Hinweis:",ecNextScenario:"Nächstes Szenario →",ecNextRiddle:"Nächstes Rätsel →",
+    ecGame1Label:"Spiel 1 von 2",ecGame2Label:"Spiel 2 von 2",
+    ecTransSub:"Jetzt andersherum. Können Sie eine Abteilung aus nur 3 Hinweisen erkennen?",
+  }
+};
+function getLang(){return localStorage.getItem('ciplaLang')||'en';}
+function setLang(l){localStorage.setItem('ciplaLang',l);}
+
+function t(key){const L=TRANSLATIONS[getLang()]||TRANSLATIONS.en;return L[key]||TRANSLATIONS.en[key]||key;}
+
+function applyLangCH(){
+  const el=id=>document.getElementById(id);
+  if(el('chBadge'))el('chBadge').textContent=t('chBadge');
+  if(el('chTapBanner'))el('chTapBanner').textContent=t('chTapBanner');
+  const h1=document.querySelector('.intro h1');
+  if(h1)h1.innerHTML=t('chH1a')+' <span>'+t('chH1b')+'</span>';
+  if(el('chSub'))el('chSub').textContent=t('chSub');
+  if(el('chInstruction'))el('chInstruction').innerHTML='<svg viewBox="0 0 24 24" fill="none"><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="16" r="1.5" fill="currentColor"/></svg>'+t('chInstruction');
+  if(el('chStartBtn'))el('chStartBtn').textContent=t('chStartBtn');
+  // completion screen
+  const compH1=document.querySelector('.complete h1');
+  if(compH1)compH1.innerHTML=t('chCompH1a')+' <span>'+t('chCompH1b')+'</span>';
+  if(el('chCompSub'))el('chCompSub').textContent=t('chCompSub');
+  if(el('chTagline'))el('chTagline').textContent=t('caringTagline');
+  if(el('chCompleteBtn'))el('chCompleteBtn').textContent=t('completeModuleBtn');
+  // game screen
+  if(el('chGameTitle'))el('chGameTitle').innerHTML=t('chH1a')+' <span>'+t('chH1b')+'</span>';
+  if(el('chScoreLbl'))el('chScoreLbl').textContent=t('chScoreLabel');
+  if(el('chTrayLabel'))el('chTrayLabel').textContent=t('chTrayLabel');
+  if(el('chViewTimeline'))el('chViewTimeline').textContent=t('chViewTimeline');
+  document.querySelectorAll('.drop-placeholder').forEach(d=>d.textContent=t('chDropPlaceholder'));
+}
+document.addEventListener("DOMContentLoaded",applyLangCH);
+</script>
+</body>
+</html>
